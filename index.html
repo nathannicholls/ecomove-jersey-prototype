@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EcoMove Jersey - Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Design System */
+    :root {
+      /* Primary */
+      --green-500: #2D7D46;
+      --green-100: #E8F5E9;
+      /* Secondary */
+      --blue-500: #1E88E5;
+      --blue-100: #E3F2FD;
+      /* Accent */
+      --orange-500: #FF9800;
+      --orange-100: #FFF3E0;
+      /* Neutral */
+      --gray-900: #212121;
+      --gray-600: #757575;
+      --gray-200: #EEEEEE;
+      --gray-50: #FAFAFA;
+      --white: #FFFFFF;
+      /* Semantic */
+      --success: #4CAF50;
+      --warning: #FFC107;
+      --error: #F44336;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    /* Phone Frame */
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: var(--white);
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Screen Container */
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--white);
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-bar.light {
+      color: var(--white);
+    }
+
+    .status-bar.dark {
+      color: var(--gray-900);
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      height: 34px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 8px;
+    }
+
+    .home-indicator-bar {
+      width: 134px;
+      height: 5px;
+      background: var(--gray-900);
+      border-radius: 3px;
+      opacity: 0.3;
+    }
+
+    /* Typography */
+    .display { font-size: 32px; line-height: 40px; font-weight: 700; }
+    .h1 { font-size: 28px; line-height: 36px; font-weight: 700; }
+    .h2 { font-size: 24px; line-height: 32px; font-weight: 700; }
+    .h3 { font-size: 20px; line-height: 28px; font-weight: 600; }
+    .h4 { font-size: 18px; line-height: 24px; font-weight: 600; }
+    .body-large { font-size: 16px; line-height: 24px; }
+    .body { font-size: 14px; line-height: 20px; }
+    .caption { font-size: 12px; line-height: 16px; }
+    .overline { font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      height: 56px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: none;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--green-500);
+      color: var(--white);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      border: 2px solid var(--green-500);
+      color: var(--green-500);
+    }
+
+    .btn-apple {
+      background: #000;
+      color: var(--white);
+    }
+
+    .btn-google {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      color: var(--gray-600);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card-colored {
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    /* Input */
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--green-500);
+    }
+
+    /* Progress Dots */
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 16px 0;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-200);
+    }
+
+    .dot.active {
+      background: var(--gray-900);
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      height: 56px;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 8px;
+    }
+
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--gray-600);
+      font-size: 10px;
+    }
+
+    .tab-item.active {
+      color: var(--green-500);
+    }
+
+    .tab-icon {
+      font-size: 24px;
+    }
+
+    /* Header */
+    .header {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header-action {
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      height: 8px;
+      background: var(--gray-200);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--green-500);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    /* Screen 1: Splash */
+    .splash-screen {
+      background: linear-gradient(180deg, #1a3d2a 0%, #0d1f15 100%);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .splash-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 32px;
+    }
+
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      background: var(--green-500);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin-bottom: 24px;
+    }
+
+    .splash-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .splash-tagline {
+      opacity: 0.8;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .splash-loader {
+      margin-top: 80px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .splash-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--white);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .splash-dot:nth-child(2) { animation-delay: 0.2s; }
+    .splash-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Screen 2: Sign Up */
+    .signup-screen {
+      padding: 0 16px;
+    }
+
+    .signup-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding-top: 60px;
+    }
+
+    .signup-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .signup-header h1 {
+      margin-bottom: 12px;
+    }
+
+    .signup-header p {
+      color: var(--gray-600);
+    }
+
+    .signup-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px 0;
+      color: var(--gray-600);
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    .signup-footer {
+      text-align: center;
+      margin-top: auto;
+      padding-bottom: 24px;
+    }
+
+    .signup-footer p {
+      color: var(--gray-600);
+      font-size: 14px;
+    }
+
+    .signup-footer a {
+      color: var(--blue-500);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .legal-text {
+      font-size: 12px;
+      color: var(--gray-600);
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .legal-text a {
+      color: var(--gray-600);
+      text-decoration: underline;
+    }
+
+    /* Screen 3: Profile Setup */
+    .profile-screen {
+      padding: 0 16px;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 0;
+    }
+
+    .skip-btn {
+      color: var(--gray-600);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .profile-content {
+      flex: 1;
+    }
+
+    .profile-title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .profile-subtitle {
+      text-align: center;
+      color: var(--gray-600);
+      margin-bottom: 32px;
+    }
+
+    .motivation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .motivation-card {
+      height: 100px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .motivation-card.selected {
+      background: var(--green-100);
+      border-color: var(--green-500);
+    }
+
+    .motivation-card .icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .profile-footer {
+      padding: 16px 0;
+    }
+
+    /* Screen 4: Health Permission */
+    .health-screen {
+      padding: 0 16px;
+    }
+
+    .health-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+    }
+
+    .health-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 24px;
+    }
+
+    .health-title {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .health-description {
+      text-align: center;
+      color: var(--gray-600);
+      margin-bottom: 32px;
+      padding: 0 16px;
+    }
+
+    .health-info {
+      background: var(--green-100);
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .health-info-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .health-info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .health-check {
+      color: var(--green-500);
+      font-size: 20px;
+    }
+
+    .health-footer {
+      width: 100%;
+      padding: 24px 0;
+    }
+
+    .privacy-link {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .privacy-link a {
+      color: var(--blue-500);
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    /* Screen 5: Home Dashboard */
+    .home-screen {
+      background: var(--gray-50);
+    }
+
+    .home-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .notification-badge {
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--error);
+      color: var(--white);
+      font-size: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .home-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .greeting {
+      margin-bottom: 16px;
+    }
+
+    .today-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .today-label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .step-count {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .step-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .step-label {
+      color: var(--gray-600);
+    }
+
+    .today-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .points-earned {
+      color: var(--green-500);
+      font-weight: 600;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-action {
+      font-size: 12px;
+      color: var(--green-500);
+      font-weight: 500;
+    }
+
+    .almost-card {
+      background: var(--orange-100);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .almost-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--orange-500);
+      margin-bottom: 12px;
+    }
+
+    .almost-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .almost-reward {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reward-icon {
+      font-size: 32px;
+    }
+
+    .reward-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .reward-info p {
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    .challenge-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer;
+    }
+
+    .challenge-label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .challenge-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .challenge-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .view-link {
+      color: var(--green-500);
+      font-weight: 500;
+    }
+
+    /* Screen 6: Rewards */
+    .rewards-screen {
+      background: var(--gray-50);
+    }
+
+    .points-banner {
+      background: var(--green-500);
+      color: var(--white);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .points-banner-label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .points-banner-value {
+      font-size: 48px;
+      font-weight: 700;
+    }
+
+    .rewards-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .section-header {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .almost-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+
+    .almost-item {
+      min-width: 120px;
+      background: var(--white);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer;
+    }
+
+    .almost-item-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .almost-item-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .almost-item-pts {
+      font-size: 12px;
+      color: var(--green-500);
+      font-weight: 500;
+    }
+
+    .almost-item-gap {
+      font-size: 10px;
+      color: var(--gray-600);
+    }
+
+    .category-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+    }
+
+    .chip {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      background: var(--white);
+      color: var(--gray-600);
+      border: 1px solid var(--gray-200);
+    }
+
+    .chip.active {
+      background: var(--green-500);
+      color: var(--white);
+      border-color: var(--green-500);
+    }
+
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .reward-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer;
+    }
+
+    .reward-card-image {
+      height: 100px;
+      background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .reward-card-content {
+      padding: 12px;
+    }
+
+    .reward-card-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .reward-card-pts {
+      font-size: 14px;
+      color: var(--green-500);
+      font-weight: 600;
+    }
+
+    /* Screen 7: Voucher */
+    .voucher-screen {
+      background: var(--gray-50);
+    }
+
+    .voucher-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .voucher-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+
+    .qr-code {
+      width: 200px;
+      height: 200px;
+      background: var(--gray-900);
+      margin: 0 auto 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .qr-pattern {
+      width: 160px;
+      height: 160px;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 2px;
+    }
+
+    .qr-cell {
+      background: var(--white);
+      border-radius: 1px;
+    }
+
+    .qr-cell.dark {
+      background: var(--gray-900);
+    }
+
+    .voucher-code {
+      font-family: monospace;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .voucher-instruction {
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .voucher-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .voucher-description {
+      color: var(--gray-600);
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .voucher-info-card {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .voucher-info-label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .voucher-info-value {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .voucher-info-sub {
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    .location-list {
+      list-style: none;
+      font-size: 14px;
+    }
+
+    .location-list li {
+      padding: 4px 0;
+    }
+
+    .location-list li::before {
+      content: "• ";
+      color: var(--green-500);
+    }
+
+    .offline-notice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 16px;
+    }
+
+    /* Navigation hint */
+    .nav-hint {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Screen 1: Splash -->
+    <div class="screen splash-screen active" id="splash">
+      <div class="status-bar light">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="splash-content">
+        <div class="splash-logo">🚶</div>
+        <h1 class="splash-title">EcoMove Jersey</h1>
+        <p class="splash-tagline">Walk more. Earn more.<br>Jersey proud.</p>
+        <div class="splash-loader">
+          <div class="splash-dot"></div>
+          <div class="splash-dot"></div>
+          <div class="splash-dot"></div>
+        </div>
+      </div>
+      <div class="home-indicator">
+        <div class="home-indicator-bar" style="background: white;"></div>
+      </div>
+    </div>
+
+    <!-- Screen 2: Sign Up -->
+    <div class="screen signup-screen" id="signup">
+      <div class="status-bar dark">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="signup-content">
+        <div class="signup-header">
+          <h1 class="h1">Welcome to EcoMove</h1>
+          <p class="body">Get rewarded for walking, cycling, and taking the bus</p>
+        </div>
+        <div class="signup-buttons">
+          <button class="btn btn-apple" onclick="navigateTo('profile')">
+            <span></span> Continue with Apple
+          </button>
+          <button class="btn btn-google" onclick="navigateTo('profile')">
+            <span>G</span> Continue with Google
+          </button>
+        </div>
+        <div class="divider">
+          <div class="divider-line"></div>
+          <span>or</span>
+          <div class="divider-line"></div>
+        </div>
+        <button class="btn btn-secondary" onclick="navigateTo('profile')">
+          ✉️ Sign up with Email
+        </button>
+        <div class="signup-footer">
+          <p>Already have an account? <a href="#" onclick="navigateTo('home')">Log in</a></p>
+        </div>
+        <p class="legal-text">
+          By continuing, you agree to our<br>
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </p>
+      </div>
+      <div class="home-indicator">
+        <div class="home-indicator-bar"></div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Profile Setup -->
+    <div class="screen profile-screen" id="profile">
+      <div class="status-bar dark">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="profile-header">
+        <span class="skip-btn" onclick="navigateTo('health')">Skip</span>
+      </div>
+      <div class="profile-content">
+        <h2 class="h2 profile-title">Tell us about you</h2>
+        <p class="body profile-subtitle">This helps us personalize your experience</p>
+
+        <div class="input-group">
+          <label class="input-label">First name *</label>
+          <input type="text" class="input" placeholder="Enter your name">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Parish (optional)</label>
+          <select class="input">
+            <option>Select your parish</option>
+            <option>St Helier</option>
+            <option>St Brelade</option>
+            <option>St Peter</option>
+            <option>Grouville</option>
+            <option>St Saviour</option>
+            <option>St Clement</option>
+            <option>St Lawrence</option>
+            <option>Trinity</option>
+            <option>St John</option>
+            <option>St Mary</option>
+            <option>St Ouen</option>
+            <option>St Martin</option>
+          </select>
+        </div>
+
+        <label class="input-label">What motivates you most?</label>
+        <div class="motivation-grid">
+          <div class="motivation-card" onclick="selectMotivation(this)">
+            <span class="icon">❤️</span>
+            <span>Health</span>
+          </div>
+          <div class="motivation-card" onclick="selectMotivation(this)">
+            <span class="icon">💰</span>
+            <span>Savings</span>
+          </div>
+          <div class="motivation-card" onclick="selectMotivation(this)">
+            <span class="icon">🌍</span>
+            <span>Planet</span>
+          </div>
+          <div class="motivation-card" onclick="selectMotivation(this)">
+            <span class="icon">👥</span>
+            <span>Social</span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-footer">
+        <button class="btn btn-primary" onclick="navigateTo('health')">Continue</button>
+        <div class="progress-dots">
+          <div class="dot active"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div class="home-indicator">
+        <div class="home-indicator-bar"></div>
+      </div>
+    </div>
+
+    <!-- Screen 4: Health Permission -->
+    <div class="screen health-screen" id="health">
+      <div class="status-bar dark">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="profile-header">
+        <span class="skip-btn" onclick="navigateTo('home')">Skip</span>
+      </div>
+      <div class="health-content">
+        <div class="health-icon">❤️</div>
+        <h2 class="h2 health-title">Connect your health data</h2>
+        <p class="body health-description">
+          EcoMove automatically tracks your steps so you earn points without thinking about it.
+        </p>
+
+        <div class="health-info">
+          <div class="health-info-item">
+            <span class="health-check">✓</span>
+            <span>We only access step count</span>
+          </div>
+          <div class="health-info-item">
+            <span class="health-check">✓</span>
+            <span>We never see heart rate, weight, or health data</span>
+          </div>
+          <div class="health-info-item">
+            <span class="health-check">✓</span>
+            <span>Your data stays secure under Jersey Data Trust governance</span>
+          </div>
+        </div>
+      </div>
+      <div class="health-footer">
+        <button class="btn btn-primary" onclick="navigateTo('home')">Connect Health Data</button>
+        <div class="privacy-link">
+          <a href="#">Learn more about our privacy policy</a>
+        </div>
+        <div class="progress-dots">
+          <div class="dot active"></div>
+          <div class="dot active"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div class="home-indicator">
+        <div class="home-indicator-bar"></div>
+      </div>
+    </div>
+
+    <!-- Screen 5: Home Dashboard -->
+    <div class="screen home-screen" id="home">
+      <div class="status-bar dark">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="header home-header">
+        <span class="header-action">☰</span>
+        <span class="header-title">EcoMove</span>
+        <span class="header-action notification-badge">
+          🔔
+          <span class="badge">2</span>
+        </span>
+      </div>
+      <div class="home-content">
+        <h3 class="h3 greeting">Good morning, Fiona! 👋</h3>
+
+        <div class="today-card">
+          <div class="today-label">TODAY'S ACTIVITY</div>
+          <div class="step-count">
+            <div class="step-number">4,523</div>
+            <div class="step-label">steps</div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 60%;"></div>
+          </div>
+          <div class="today-footer">
+            <span>Goal: 7,500</span>
+            <span class="points-earned">+45 points</span>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card" onclick="navigateTo('rewards')">
+            <div class="stat-label">💰 POINTS</div>
+            <div class="stat-value">752</div>
+            <div class="stat-action">Redeem →</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">🔥 STREAK</div>
+            <div class="stat-value">5 days</div>
+            <div class="stat-action">Keep going!</div>
+          </div>
+        </div>
+
+        <div class="almost-card" onclick="navigateTo('rewards')">
+          <div class="almost-header">🎯 ALMOST THERE!</div>
+          <div class="almost-content">
+            <div class="almost-reward">
+              <span class="reward-icon">☕</span>
+              <div class="reward-info">
+                <h4>Co-op Coffee</h4>
+                <p>Just 48 more points!</p>
+              </div>
+            </div>
+            <span>→</span>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <div class="challenge-label">🏆 ACTIVE CHALLENGE</div>
+          <div class="challenge-title">January Step Challenge</div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 78%;"></div>
+          </div>
+          <div class="challenge-footer">
+            <span>3 days left</span>
+            <span class="view-link">View →</span>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item active">
+          <span class="tab-icon">🏠</span>
+          <span>Home</span>
+        </div>
+        <div class="tab-item">
+          <span class="tab-icon">📊</span>
+          <span>Activity</span>
+        </div>
+        <div class="tab-item" onclick="navigateTo('rewards')">
+          <span class="tab-icon">🎁</span>
+          <span>Rewards</span>
+        </div>
+        <div class="tab-item">
+          <span class="tab-icon">🏆</span>
+          <span>Challenges</span>
+        </div>
+        <div class="tab-item">
+          <span class="tab-icon">👤</span>
+          <span>Profile</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 6: Rewards -->
+    <div class="screen rewards-screen" id="rewards">
+      <div class="status-bar dark">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="header">
+        <span class="header-action" onclick="navigateTo('home')">←</span>
+        <span class="header-title">Rewards</span>
+        <span class="header-action" onclick="navigateTo('voucher')">🎫</span>
+      </div>
+      <div class="points-banner">
+        <div class="points-banner-label">💰 YOUR POINTS</div>
+        <div class="points-banner-value">752</div>
+      </div>
+      <div class="rewards-content">
+        <div class="section-header">🎯 ALMOST THERE</div>
+        <div class="almost-scroll">
+          <div class="almost-item" onclick="navigateTo('voucher')">
+            <div class="almost-item-icon">☕</div>
+            <div class="almost-item-name">Coffee</div>
+            <div class="almost-item-pts">100 pts</div>
+            <div class="almost-item-gap">48 away</div>
+          </div>
+          <div class="almost-item">
+            <div class="almost-item-icon">🥐</div>
+            <div class="almost-item-name">Pastry</div>
+            <div class="almost-item-pts">150 pts</div>
+            <div class="almost-item-gap">98 away</div>
+          </div>
+          <div class="almost-item">
+            <div class="almost-item-icon">🥗</div>
+            <div class="almost-item-name">Salad</div>
+            <div class="almost-item-pts">200 pts</div>
+            <div class="almost-item-gap">148 away</div>
+          </div>
+        </div>
+
+        <div class="section-header">CATEGORIES</div>
+        <div class="category-chips">
+          <div class="chip active">All</div>
+          <div class="chip">☕ Cafes</div>
+          <div class="chip">🍽 Dining</div>
+          <div class="chip">🛍 Shopping</div>
+          <div class="chip">🎬 Entertainment</div>
+        </div>
+
+        <div class="rewards-grid">
+          <div class="reward-card" onclick="navigateTo('voucher')">
+            <div class="reward-card-image">☕</div>
+            <div class="reward-card-content">
+              <div class="reward-card-name">Co-op Coffee</div>
+              <div class="reward-card-pts">100 pts</div>
+            </div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-card-image">🥐</div>
+            <div class="reward-card-content">
+              <div class="reward-card-name">Bakery Treat</div>
+              <div class="reward-card-pts">150 pts</div>
+            </div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-card-image">🎬</div>
+            <div class="reward-card-content">
+              <div class="reward-card-name">Cinema Ticket</div>
+              <div class="reward-card-pts">500 pts</div>
+            </div>
+          </div>
+          <div class="reward-card">
+            <div class="reward-card-image">🏃</div>
+            <div class="reward-card-content">
+              <div class="reward-card-name">Sports Voucher</div>
+              <div class="reward-card-pts">750 pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item" onclick="navigateTo('home')">
+          <span class="tab-icon">🏠</span>
+          <span>Home</span>
+        </div>
+        <div class="tab-item">
+          <span class="tab-icon">📊</span>
+          <span>Activity</span>
+        </div>
+        <div class="tab-item active">
+          <span class="tab-icon">🎁</span>
+          <span>Rewards</span>
+        </div>
+        <div class="tab-item">
+          <span class="tab-icon">🏆</span>
+          <span>Challenges</span>
+        </div>
+        <div class="tab-item">
+          <span class="tab-icon">👤</span>
+          <span>Profile</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 7: Voucher -->
+    <div class="screen voucher-screen" id="voucher">
+      <div class="status-bar dark">
+        <span>9:41</span>
+        <span></span>
+      </div>
+      <div class="header">
+        <span class="header-action" onclick="navigateTo('rewards')">←</span>
+        <span class="header-title">My Voucher</span>
+        <span class="header-action">Share</span>
+      </div>
+      <div class="voucher-content">
+        <div class="voucher-card">
+          <div class="qr-code">
+            <div class="qr-pattern">
+              <!-- Simulated QR pattern -->
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
+              <div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
+              <div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
+            </div>
+          </div>
+          <div class="voucher-code">ECO-X7K9</div>
+          <div class="voucher-instruction">Show this to the cashier</div>
+        </div>
+
+        <div class="voucher-title">☕ Co-op Coffee</div>
+        <p class="voucher-description">Any hot drink from the Costa Coffee machine.</p>
+
+        <div class="voucher-info-card">
+          <div class="voucher-info-label">📅 EXPIRES</div>
+          <div class="voucher-info-value">February 15, 2026</div>
+          <div class="voucher-info-sub">(30 days remaining)</div>
+        </div>
+
+        <div class="voucher-info-card">
+          <div class="voucher-info-label">📍 VALID LOCATIONS</div>
+          <ul class="location-list">
+            <li>Co-op St Helier</li>
+            <li>Co-op St Brelade</li>
+            <li>All Jersey Co-op locations</li>
+          </ul>
+        </div>
+
+        <div class="offline-notice">
+          ℹ️ Saved offline for use without internet connection
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-hint">Click buttons to navigate between screens</div>
+
+  <script>
+    // Auto-advance from splash screen
+    setTimeout(() => {
+      navigateTo('signup');
+    }, 3000);
+
+    function navigateTo(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show target screen
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function selectMotivation(card) {
+      // Toggle selection
+      document.querySelectorAll('.motivation-card').forEach(c => {
+        c.classList.remove('selected');
+      });
+      card.classList.add('selected');
+    }
+
+    // Chip selection
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Hide nav hint after first interaction
+    document.addEventListener('click', () => {
+      document.querySelector('.nav-hint').style.display = 'none';
+    }, { once: true });
+  </script>
+</body>
+</html>
