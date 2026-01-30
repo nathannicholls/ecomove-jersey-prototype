@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=375, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>EcoMove Jersey - Prototype</title>
+  <title>EcoMove Jersey - Full Prototype</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Design System */
+    /* ========================================
+       DESIGN SYSTEM
+       ======================================== */
     :root {
       /* Primary */
       --green-500: #2D7D46;
+      --green-400: #3D9D5C;
       --green-100: #E8F5E9;
       /* Secondary */
       --blue-500: #1E88E5;
@@ -21,14 +24,21 @@
       --orange-100: #FFF3E0;
       /* Neutral */
       --gray-900: #212121;
+      --gray-700: #424242;
       --gray-600: #757575;
+      --gray-400: #BDBDBD;
       --gray-200: #EEEEEE;
+      --gray-100: #F5F5F5;
       --gray-50: #FAFAFA;
       --white: #FFFFFF;
       /* Semantic */
       --success: #4CAF50;
       --warning: #FFC107;
       --error: #F44336;
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
     }
 
     * {
@@ -68,10 +78,21 @@
       top: 0;
       left: 0;
       background: var(--white);
+      animation: fadeIn 0.2s ease;
     }
 
     .screen.active {
       display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     /* Status Bar */
@@ -83,15 +104,11 @@
       align-items: center;
       font-size: 14px;
       font-weight: 600;
+      flex-shrink: 0;
     }
 
-    .status-bar.light {
-      color: var(--white);
-    }
-
-    .status-bar.dark {
-      color: var(--gray-900);
-    }
+    .status-bar.light { color: var(--white); }
+    .status-bar.dark { color: var(--gray-900); }
 
     /* Home Indicator */
     .home-indicator {
@@ -100,6 +117,7 @@
       justify-content: center;
       align-items: center;
       padding-bottom: 8px;
+      flex-shrink: 0;
     }
 
     .home-indicator-bar {
@@ -119,13 +137,13 @@
     .body-large { font-size: 16px; line-height: 24px; }
     .body { font-size: 14px; line-height: 20px; }
     .caption { font-size: 12px; line-height: 16px; }
-    .overline { font-size: 10px; line-height: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+    .overline { font-size: 10px; line-height: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
     /* Buttons */
     .btn {
       width: 100%;
       height: 56px;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
@@ -134,74 +152,63 @@
       justify-content: center;
       gap: 12px;
       border: none;
-      transition: transform 0.1s, opacity 0.2s;
+      transition: transform 0.1s, opacity 0.2s, background 0.2s;
     }
 
-    .btn:active {
-      transform: scale(0.98);
-    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .btn-primary {
-      background: var(--green-500);
-      color: var(--white);
-    }
-
-    .btn-secondary {
-      background: var(--white);
-      border: 2px solid var(--green-500);
-      color: var(--green-500);
-    }
-
-    .btn-apple {
-      background: #000;
-      color: var(--white);
-    }
-
-    .btn-google {
-      background: var(--white);
-      border: 1px solid var(--gray-200);
-      color: var(--gray-600);
-    }
+    .btn-primary { background: var(--green-500); color: var(--white); }
+    .btn-primary:hover { background: var(--green-400); }
+    .btn-secondary { background: var(--white); border: 2px solid var(--green-500); color: var(--green-500); }
+    .btn-tertiary { background: transparent; color: var(--green-500); height: auto; }
+    .btn-apple { background: #000; color: var(--white); }
+    .btn-google { background: var(--white); border: 1px solid var(--gray-200); color: var(--gray-600); }
+    .btn-danger { background: var(--error); color: var(--white); }
+    .btn-outline { background: transparent; border: 2px solid var(--gray-200); color: var(--gray-600); }
 
     /* Cards */
     .card {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-md);
     }
 
-    .card-colored {
+    .card-flat {
+      background: var(--gray-50);
       border-radius: 12px;
       padding: 16px;
     }
 
     /* Input */
-    .input-group {
-      margin-bottom: 16px;
-    }
+    .input-group { margin-bottom: 16px; }
 
     .input-label {
       font-size: 14px;
-      color: var(--gray-600);
+      font-weight: 500;
+      color: var(--gray-700);
       margin-bottom: 8px;
       display: block;
     }
 
     .input {
       width: 100%;
-      height: 48px;
-      border: 1px solid var(--gray-200);
-      border-radius: 8px;
+      height: 52px;
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
       padding: 0 16px;
       font-size: 16px;
       font-family: inherit;
+      transition: border-color 0.2s;
     }
 
     .input:focus {
       outline: none;
       border-color: var(--green-500);
     }
+
+    .input::placeholder { color: var(--gray-400); }
 
     /* Progress Dots */
     .progress-dots {
@@ -216,11 +223,10 @@
       height: 8px;
       border-radius: 50%;
       background: var(--gray-200);
+      transition: background 0.2s;
     }
 
-    .dot.active {
-      background: var(--gray-900);
-    }
+    .dot.active { background: var(--green-500); }
 
     /* Tab Bar */
     .tab-bar {
@@ -231,26 +237,24 @@
       justify-content: space-around;
       align-items: center;
       padding: 0 8px;
+      flex-shrink: 0;
     }
 
     .tab-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       cursor: pointer;
-      padding: 8px;
-      color: var(--gray-600);
+      padding: 8px 12px;
+      color: var(--gray-400);
       font-size: 10px;
+      font-weight: 500;
+      transition: color 0.2s;
     }
 
-    .tab-item.active {
-      color: var(--green-500);
-    }
-
-    .tab-icon {
-      font-size: 24px;
-    }
+    .tab-item.active { color: var(--green-500); }
+    .tab-icon { font-size: 24px; }
 
     /* Header */
     .header {
@@ -259,19 +263,20 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      border-bottom: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-100);
+      flex-shrink: 0;
     }
 
-    .header-title {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
+    .header-title { font-size: 18px; font-weight: 600; }
     .header-action {
       font-size: 24px;
       cursor: pointer;
       padding: 8px;
+      border-radius: 8px;
+      transition: background 0.2s;
     }
+    .header-action:hover { background: var(--gray-100); }
+    .header-text-btn { font-size: 16px; font-weight: 500; color: var(--green-500); cursor: pointer; }
 
     /* Progress Bar */
     .progress-bar {
@@ -285,12 +290,163 @@
       height: 100%;
       background: var(--green-500);
       border-radius: 4px;
-      transition: width 0.3s ease;
+      transition: width 0.5s ease;
     }
 
-    /* Screen 1: Splash */
+    /* Segment Control */
+    .segment-control {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-600);
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .segment-btn.active {
+      background: var(--white);
+      color: var(--gray-900);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* List Item */
+    .list-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .list-item:hover { background: var(--gray-50); }
+    .list-item:last-child { border-bottom: none; }
+
+    .list-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-right: 12px;
+    }
+
+    .list-content { flex: 1; }
+    .list-title { font-size: 16px; font-weight: 500; }
+    .list-subtitle { font-size: 14px; color: var(--gray-600); margin-top: 2px; }
+    .list-chevron { color: var(--gray-400); font-size: 20px; }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-primary { background: var(--green-500); color: white; }
+    .badge-error { background: var(--error); color: white; }
+    .badge-warning { background: var(--warning); color: var(--gray-900); }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      padding: 24px;
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--gray-300);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+
+    /* Toast */
+    .toast {
+      position: absolute;
+      top: 60px;
+      left: 16px;
+      right: 16px;
+      background: var(--gray-900);
+      color: white;
+      padding: 16px;
+      border-radius: 12px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      z-index: 200;
+      animation: slideUp 0.3s ease;
+    }
+
+    .toast.active { display: flex; }
+    .toast-icon { font-size: 24px; }
+    .toast-message { flex: 1; font-size: 14px; }
+
+    /* Scrollable Content */
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ========================================
+       SCREEN 1: SPLASH
+       ======================================== */
     .splash-screen {
-      background: linear-gradient(180deg, #1a3d2a 0%, #0d1f15 100%);
+      background: linear-gradient(180deg, #1a5c32 0%, #0d2d19 100%);
       justify-content: center;
       align-items: center;
       text-align: center;
@@ -309,26 +465,18 @@
     .splash-logo {
       width: 120px;
       height: 120px;
-      background: var(--green-500);
-      border-radius: 24px;
+      background: linear-gradient(135deg, var(--green-500), var(--green-400));
+      border-radius: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 48px;
+      font-size: 56px;
       margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
 
-    .splash-title {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .splash-tagline {
-      opacity: 0.8;
-      font-size: 16px;
-      line-height: 24px;
-    }
+    .splash-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+    .splash-tagline { opacity: 0.85; font-size: 16px; line-height: 24px; }
 
     .splash-loader {
       margin-top: 80px;
@@ -352,123 +500,87 @@
       50% { opacity: 1; transform: scale(1); }
     }
 
-    /* Screen 2: Sign Up */
-    .signup-screen {
-      padding: 0 16px;
-    }
+    /* ========================================
+       SCREEN 2: SIGN UP
+       ======================================== */
+    .signup-screen { padding: 0 16px; }
 
     .signup-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding-top: 60px;
+      padding-top: 40px;
     }
 
-    .signup-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .signup-header h1 {
-      margin-bottom: 12px;
-    }
-
-    .signup-header p {
-      color: var(--gray-600);
-    }
-
-    .signup-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 24px 0;
-      color: var(--gray-600);
-    }
-
-    .divider-line {
-      flex: 1;
-      height: 1px;
-      background: var(--gray-200);
-    }
+    .signup-header { text-align: center; margin-bottom: 40px; }
+    .signup-header h1 { margin-bottom: 12px; color: var(--gray-900); }
+    .signup-header p { color: var(--gray-600); font-size: 16px; }
+    .signup-buttons { display: flex; flex-direction: column; gap: 12px; }
+    .signup-divider { margin: 24px 0; }
 
     .signup-footer {
       text-align: center;
       margin-top: auto;
-      padding-bottom: 24px;
+      padding-bottom: 16px;
     }
 
-    .signup-footer p {
-      color: var(--gray-600);
-      font-size: 14px;
-    }
-
-    .signup-footer a {
-      color: var(--blue-500);
-      text-decoration: none;
-      font-weight: 600;
-    }
+    .signup-footer p { color: var(--gray-600); font-size: 14px; }
+    .signup-footer a { color: var(--blue-500); text-decoration: none; font-weight: 600; }
 
     .legal-text {
       font-size: 12px;
-      color: var(--gray-600);
+      color: var(--gray-500);
       text-align: center;
       margin-top: 24px;
+      line-height: 18px;
     }
 
-    .legal-text a {
-      color: var(--gray-600);
-      text-decoration: underline;
-    }
+    .legal-text a { color: var(--gray-500); text-decoration: underline; }
 
-    /* Screen 3: Profile Setup */
-    .profile-screen {
-      padding: 0 16px;
-    }
+    /* ========================================
+       SCREEN 3: PROFILE SETUP
+       ======================================== */
+    .setup-screen { padding: 0 16px; }
 
-    .profile-header {
+    .setup-header {
       display: flex;
       justify-content: flex-end;
-      padding: 16px 0;
+      padding: 12px 0;
     }
 
     .skip-btn {
-      color: var(--gray-600);
-      font-size: 14px;
+      color: var(--gray-500);
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
     }
 
-    .profile-content {
-      flex: 1;
-    }
+    .setup-content { flex: 1; }
 
-    .profile-title {
+    .setup-title {
       text-align: center;
       margin-bottom: 8px;
+      color: var(--gray-900);
     }
 
-    .profile-subtitle {
+    .setup-subtitle {
       text-align: center;
       color: var(--gray-600);
       margin-bottom: 32px;
+      font-size: 16px;
     }
 
     .motivation-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 24px 0;
+      gap: 12px;
+      margin: 16px 0 24px;
     }
 
     .motivation-card {
       height: 100px;
       background: var(--gray-50);
-      border-radius: 8px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -478,60 +590,48 @@
       transition: all 0.2s;
     }
 
+    .motivation-card:hover { background: var(--gray-100); }
+
     .motivation-card.selected {
       background: var(--green-100);
       border-color: var(--green-500);
     }
 
-    .motivation-card .icon {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
+    .motivation-card .icon { font-size: 32px; margin-bottom: 8px; }
+    .motivation-card span:last-child { font-weight: 500; color: var(--gray-700); }
 
-    .profile-footer {
-      padding: 16px 0;
-    }
+    .setup-footer { padding: 16px 0; }
 
-    /* Screen 4: Health Permission */
-    .health-screen {
-      padding: 0 16px;
-    }
-
+    /* ========================================
+       SCREEN 4: HEALTH PERMISSION
+       ======================================== */
     .health-content {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 40px;
+      padding: 40px 16px 0;
     }
 
     .health-icon {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
-      border-radius: 16px;
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
+      font-size: 48px;
       margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(255,107,107,0.3);
     }
 
-    .health-title {
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .health-description {
-      text-align: center;
-      color: var(--gray-600);
-      margin-bottom: 32px;
-      padding: 0 16px;
-    }
+    .health-title { text-align: center; margin-bottom: 12px; color: var(--gray-900); }
+    .health-description { text-align: center; color: var(--gray-600); margin-bottom: 32px; font-size: 16px; line-height: 24px; }
 
     .health-info {
       background: var(--green-100);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 20px;
       width: 100%;
     }
@@ -539,57 +639,107 @@
     .health-info-item {
       display: flex;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      align-items: flex-start;
     }
 
-    .health-info-item:last-child {
-      margin-bottom: 0;
-    }
+    .health-info-item:last-child { margin-bottom: 0; }
+    .health-check { color: var(--green-500); font-size: 20px; flex-shrink: 0; }
+    .health-info-item span:last-child { color: var(--gray-700); font-size: 15px; line-height: 22px; }
 
-    .health-check {
-      color: var(--green-500);
-      font-size: 20px;
-    }
-
-    .health-footer {
-      width: 100%;
-      padding: 24px 0;
-    }
+    .health-footer { width: 100%; padding: 24px 16px; }
 
     .privacy-link {
       text-align: center;
       margin-top: 16px;
     }
 
-    .privacy-link a {
-      color: var(--blue-500);
-      font-size: 14px;
-      text-decoration: none;
+    .privacy-link a { color: var(--blue-500); font-size: 14px; text-decoration: none; font-weight: 500; }
+
+    /* ========================================
+       SCREEN 5: VALUE PREVIEW
+       ======================================== */
+    .value-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 0;
+      text-align: center;
     }
 
-    /* Screen 5: Home Dashboard */
-    .home-screen {
-      background: var(--gray-50);
+    .value-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--gray-900);
     }
+
+    .value-subtitle {
+      color: var(--gray-600);
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+
+    .value-card {
+      background: linear-gradient(135deg, var(--green-500), var(--green-400));
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      color: white;
+      margin-bottom: 24px;
+    }
+
+    .value-card-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+      margin-bottom: 12px;
+    }
+
+    .value-card-number { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
+    .value-card-sub { font-size: 16px; opacity: 0.9; }
+
+    .first-reward-card {
+      background: var(--orange-100);
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .first-reward-icon { font-size: 48px; }
+
+    .first-reward-info { text-align: left; }
+    .first-reward-name { font-size: 18px; font-weight: 600; color: var(--gray-900); }
+    .first-reward-sub { font-size: 14px; color: var(--gray-600); margin-top: 4px; }
+
+    /* ========================================
+       SCREEN 6: HOME DASHBOARD
+       ======================================== */
+    .home-screen { background: var(--gray-50); }
 
     .home-header {
       background: var(--white);
-      border-bottom: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-100);
     }
 
-    .notification-badge {
-      position: relative;
-    }
+    .notification-badge { position: relative; }
 
-    .badge {
+    .notif-dot {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
       background: var(--error);
-      color: var(--white);
+      color: white;
       font-size: 10px;
-      width: 16px;
-      height: 16px;
+      font-weight: 600;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -602,165 +752,108 @@
       padding: 16px;
     }
 
-    .greeting {
-      margin-bottom: 16px;
-    }
+    .greeting { margin-bottom: 16px; color: var(--gray-900); }
 
     .today-card {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 20px;
       padding: 20px;
       margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
     }
 
-    .today-label {
-      font-size: 10px;
-      font-weight: 500;
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: var(--gray-600);
+      color: var(--gray-500);
       margin-bottom: 16px;
     }
 
-    .step-count {
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .step-number {
-      font-size: 48px;
-      font-weight: 700;
-      color: var(--gray-900);
-    }
-
-    .step-label {
-      color: var(--gray-600);
-    }
+    .step-count { text-align: center; margin-bottom: 16px; }
+    .step-number { font-size: 56px; font-weight: 700; color: var(--gray-900); line-height: 1; }
+    .step-label { color: var(--gray-500); font-size: 16px; margin-top: 4px; }
 
     .today-footer {
       display: flex;
       justify-content: space-between;
-      margin-top: 12px;
+      margin-top: 16px;
       font-size: 14px;
-      color: var(--gray-600);
     }
 
-    .points-earned {
-      color: var(--green-500);
-      font-weight: 600;
-    }
+    .today-footer span:first-child { color: var(--gray-600); }
+    .points-earned { color: var(--green-500); font-weight: 600; }
 
     .stat-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
       margin-bottom: 16px;
     }
 
     .stat-card {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
       cursor: pointer;
+      transition: transform 0.2s;
     }
 
-    .stat-label {
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--gray-600);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .stat-card:active { transform: scale(0.98); }
 
-    .stat-value {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
+    .stat-icon { font-size: 14px; margin-right: 6px; }
+    .stat-value { font-size: 28px; font-weight: 700; margin: 8px 0 4px; color: var(--gray-900); }
+    .stat-action { font-size: 13px; color: var(--green-500); font-weight: 500; }
 
-    .stat-action {
-      font-size: 12px;
-      color: var(--green-500);
-      font-weight: 500;
-    }
-
-    .almost-card {
+    .promo-card {
       background: var(--orange-100);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 16px;
       margin-bottom: 16px;
       cursor: pointer;
+      transition: transform 0.2s;
     }
 
-    .almost-header {
+    .promo-card:active { transform: scale(0.98); }
+
+    .promo-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--orange-500);
       margin-bottom: 12px;
     }
 
-    .almost-content {
+    .promo-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--orange-500);
+    }
+
+    .promo-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .almost-reward {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .promo-reward { display: flex; align-items: center; gap: 12px; }
+    .reward-icon { font-size: 36px; }
 
-    .reward-icon {
-      font-size: 32px;
-    }
-
-    .reward-info h4 {
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .reward-info p {
-      font-size: 12px;
-      color: var(--gray-600);
-    }
+    .reward-info h4 { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+    .reward-info p { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
 
     .challenge-card {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
       cursor: pointer;
     }
 
-    .challenge-label {
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--gray-600);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .challenge-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
+    .challenge-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--gray-900); }
 
     .challenge-footer {
       display: flex;
@@ -768,56 +861,157 @@
       align-items: center;
       margin-top: 12px;
       font-size: 14px;
-      color: var(--gray-600);
     }
 
-    .view-link {
-      color: var(--green-500);
-      font-weight: 500;
+    .challenge-footer span:first-child { color: var(--gray-600); }
+    .view-link { color: var(--green-500); font-weight: 500; }
+
+    /* ========================================
+       SCREEN 7: ACTIVITY
+       ======================================== */
+    .activity-screen { background: var(--gray-50); }
+
+    .activity-content { flex: 1; overflow-y: auto; }
+
+    .segment-wrapper { padding: 16px; background: var(--white); }
+
+    .date-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 16px;
+      background: var(--white);
     }
 
-    /* Screen 6: Rewards */
-    .rewards-screen {
-      background: var(--gray-50);
+    .date-nav-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gray-100);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
+    .date-nav-label { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+
+    .chart-container {
+      background: var(--white);
+      padding: 20px 16px;
+      margin: 0 16px 16px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 120px;
+      padding: 0 8px;
+    }
+
+    .chart-bar {
+      width: 20px;
+      background: var(--green-500);
+      border-radius: 4px 4px 0 0;
+      transition: height 0.3s ease;
+    }
+
+    .chart-bar.highlight { background: var(--green-400); }
+
+    .chart-labels {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 8px 0;
+      font-size: 10px;
+      color: var(--gray-500);
+    }
+
+    .summary-card {
+      margin: 0 16px 16px;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .summary-item { text-align: center; }
+    .summary-icon { font-size: 24px; margin-bottom: 4px; }
+    .summary-value { font-size: 20px; font-weight: 700; color: var(--gray-900); }
+    .summary-label { font-size: 12px; color: var(--gray-500); }
+
+    .activity-log { padding: 0 16px 16px; }
+
+    .log-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+
+    .log-item {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .log-header span:first-child { font-weight: 600; color: var(--gray-900); }
+    .log-points { color: var(--green-500); font-weight: 600; font-size: 14px; }
+    .log-details { font-size: 13px; color: var(--gray-500); }
+
+    /* ========================================
+       SCREEN 8: REWARDS
+       ======================================== */
+    .rewards-screen { background: var(--gray-50); }
 
     .points-banner {
-      background: var(--green-500);
-      color: var(--white);
-      padding: 20px;
+      background: linear-gradient(135deg, var(--green-500), var(--green-400));
+      color: white;
+      padding: 24px 20px;
       text-align: center;
     }
 
     .points-banner-label {
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      opacity: 0.8;
+      opacity: 0.9;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
     }
 
-    .points-banner-value {
-      font-size: 48px;
-      font-weight: 700;
-    }
+    .points-banner-value { font-size: 48px; font-weight: 700; }
 
-    .rewards-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
+    .rewards-content { flex: 1; overflow-y: auto; padding: 16px; }
 
     .section-header {
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: var(--gray-600);
+      color: var(--gray-500);
       margin-bottom: 12px;
       display: flex;
       align-items: center;
@@ -829,78 +1023,69 @@
       gap: 12px;
       overflow-x: auto;
       padding-bottom: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
     }
 
     .almost-item {
       min-width: 120px;
       background: var(--white);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 16px;
+      padding: 16px 12px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .almost-item-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .almost-item-name {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .almost-item-pts {
-      font-size: 12px;
-      color: var(--green-500);
-      font-weight: 500;
-    }
-
-    .almost-item-gap {
-      font-size: 10px;
-      color: var(--gray-600);
-    }
+    .almost-item-icon { font-size: 36px; margin-bottom: 8px; }
+    .almost-item-name { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+    .almost-item-pts { font-size: 13px; color: var(--green-500); font-weight: 600; }
+    .almost-item-gap { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
 
     .category-chips {
       display: flex;
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 16px;
+      -webkit-overflow-scrolling: touch;
     }
 
     .chip {
-      padding: 8px 16px;
-      border-radius: 20px;
+      padding: 10px 16px;
+      border-radius: 24px;
       font-size: 14px;
+      font-weight: 500;
       white-space: nowrap;
       cursor: pointer;
       background: var(--white);
       color: var(--gray-600);
-      border: 1px solid var(--gray-200);
+      border: none;
+      flex-shrink: 0;
+      transition: all 0.2s;
     }
 
     .chip.active {
       background: var(--green-500);
-      color: var(--white);
-      border-color: var(--green-500);
+      color: white;
     }
 
     .rewards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
 
     .reward-card {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-md);
       cursor: pointer;
+      transition: transform 0.2s;
     }
+
+    .reward-card:active { transform: scale(0.98); }
 
     .reward-card-image {
       height: 100px;
@@ -908,100 +1093,195 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
+      font-size: 44px;
     }
 
-    .reward-card-content {
-      padding: 12px;
-    }
+    .reward-card-content { padding: 12px; }
+    .reward-card-name { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+    .reward-card-pts { font-size: 14px; color: var(--green-500); font-weight: 600; }
 
-    .reward-card-name {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
+    /* ========================================
+       SCREEN 9: REWARD DETAIL
+       ======================================== */
+    .detail-screen { background: var(--gray-50); }
 
-    .reward-card-pts {
-      font-size: 14px;
-      color: var(--green-500);
-      font-weight: 600;
-    }
-
-    /* Screen 7: Voucher */
-    .voucher-screen {
-      background: var(--gray-50);
-    }
-
-    .voucher-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
-
-    .voucher-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      margin-bottom: 24px;
-    }
-
-    .qr-code {
-      width: 200px;
+    .detail-image {
       height: 200px;
-      background: var(--gray-900);
-      margin: 0 auto 16px;
-      border-radius: 8px;
+      background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
+      font-size: 80px;
     }
 
-    .qr-pattern {
-      width: 160px;
-      height: 160px;
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 2px;
+    .detail-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
     }
 
-    .qr-cell {
-      background: var(--white);
-      border-radius: 1px;
-    }
-
-    .qr-cell.dark {
-      background: var(--gray-900);
-    }
-
-    .voucher-code {
-      font-family: monospace;
+    .detail-title {
       font-size: 24px;
       font-weight: 700;
-      letter-spacing: 2px;
+      color: var(--gray-900);
       margin-bottom: 8px;
     }
 
-    .voucher-instruction {
+    .detail-partner {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .detail-description {
+      font-size: 16px;
+      color: var(--gray-700);
+      line-height: 24px;
+      margin-bottom: 20px;
+    }
+
+    .detail-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-size: 14px;
       color: var(--gray-600);
     }
+
+    .meta-icon { font-size: 20px; }
+
+    .terms-section {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .terms-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+
+    .terms-list {
+      list-style: none;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .terms-list li {
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .terms-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--gray-400);
+    }
+
+    .redeem-section {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .redeem-cost {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .redeem-points { font-size: 32px; font-weight: 700; color: var(--green-500); }
+    .redeem-label { font-size: 14px; color: var(--gray-600); }
+
+    .balance-preview {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    /* ========================================
+       SCREEN 10: VOUCHER
+       ======================================== */
+    .voucher-screen { background: var(--gray-50); }
+
+    .voucher-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+    .voucher-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 20px;
+    }
+
+    .qr-code {
+      width: 180px;
+      height: 180px;
+      background: var(--gray-900);
+      margin: 0 auto 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-pattern {
+      width: 140px;
+      height: 140px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+
+    .qr-cell { background: var(--white); border-radius: 2px; }
+    .qr-cell.dark { background: var(--gray-900); }
+
+    .voucher-code {
+      font-family: 'SF Mono', 'Courier New', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .voucher-instruction { font-size: 14px; color: var(--gray-500); }
+
+    .voucher-details { text-align: left; }
 
     .voucher-title {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-size: 20px;
       font-weight: 600;
-      margin-bottom: 16px;
+      color: var(--gray-900);
+      margin-bottom: 8px;
     }
 
     .voucher-description {
       color: var(--gray-600);
+      font-size: 15px;
+      line-height: 22px;
       margin-bottom: 16px;
-      font-size: 14px;
     }
 
     .voucher-info-card {
@@ -1012,68 +1292,290 @@
     }
 
     .voucher-info-label {
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: var(--gray-600);
+      color: var(--gray-500);
       margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .voucher-info-value {
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .voucher-info-sub {
-      font-size: 12px;
-      color: var(--gray-600);
-    }
+    .voucher-info-value { font-size: 16px; font-weight: 500; color: var(--gray-900); }
+    .voucher-info-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
 
     .location-list {
       list-style: none;
       font-size: 14px;
+      color: var(--gray-700);
     }
 
-    .location-list li {
-      padding: 4px 0;
-    }
-
-    .location-list li::before {
-      content: "• ";
-      color: var(--green-500);
-    }
+    .location-list li { padding: 3px 0; }
+    .location-list li::before { content: "• "; color: var(--green-500); }
 
     .offline-notice {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 12px;
-      color: var(--gray-600);
+      font-size: 13px;
+      color: var(--gray-500);
       margin-top: 16px;
     }
 
-    /* Navigation hint */
-    .nav-hint {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.8);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      z-index: 1000;
+    /* ========================================
+       SCREEN 11: CHALLENGES
+       ======================================== */
+    .challenges-screen { background: var(--gray-50); }
+    .challenges-content { flex: 1; overflow-y: auto; }
+
+    .challenge-item {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 0 16px 12px;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
     }
+
+    .challenge-item-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .challenge-item-icon { font-size: 20px; }
+    .challenge-item-title { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+
+    .challenge-item-desc {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+    }
+
+    .challenge-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .challenge-progress span:first-child { color: var(--gray-500); }
+
+    .challenge-bonus {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--orange-500);
+      font-weight: 600;
+    }
+
+    .challenge-rank {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-top: 8px;
+    }
+
+    .leaderboard-preview {
+      margin: 0 16px 16px;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .leaderboard-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .leaderboard-item:last-child { border-bottom: none; }
+
+    .leaderboard-rank {
+      width: 32px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .leaderboard-user {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .leaderboard-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .leaderboard-name { font-weight: 500; color: var(--gray-900); }
+    .leaderboard-steps { font-size: 14px; color: var(--gray-600); font-weight: 500; }
+
+    .leaderboard-you {
+      background: var(--green-100);
+      margin: 0 -16px;
+      padding: 10px 16px;
+      border-radius: 8px;
+    }
+
+    /* ========================================
+       SCREEN 12: PROFILE
+       ======================================== */
+    .profile-screen { background: var(--gray-50); }
+    .profile-content { flex: 1; overflow-y: auto; padding-bottom: 16px; }
+
+    .profile-header-section {
+      background: var(--white);
+      padding: 24px 16px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-500), var(--green-400));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 12px;
+      color: white;
+    }
+
+    .profile-name { font-size: 24px; font-weight: 700; color: var(--gray-900); }
+    .profile-parish { font-size: 14px; color: var(--gray-600); margin-top: 4px; }
+    .profile-member { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+    .stats-section {
+      margin: 0 16px 16px;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .stats-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-item { text-align: center; }
+    .stat-item-icon { font-size: 24px; margin-bottom: 4px; }
+    .stat-item-value { font-size: 20px; font-weight: 700; color: var(--gray-900); }
+    .stat-item-label { font-size: 12px; color: var(--gray-500); }
+
+    .settings-section {
+      margin: 0 16px;
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .logout-section {
+      margin: 16px;
+    }
+
+    .app-version {
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 16px;
+    }
+
+    /* ========================================
+       SCREEN 13: NOTIFICATIONS SETTINGS
+       ======================================== */
+    .settings-content { flex: 1; overflow-y: auto; padding: 16px; }
+
+    .toggle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .toggle-item:last-child { border-bottom: none; }
+
+    .toggle-label {
+      font-size: 16px;
+      color: var(--gray-900);
+    }
+
+    .toggle-sub {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 2px;
+    }
+
+    .toggle-switch {
+      width: 52px;
+      height: 32px;
+      background: var(--gray-300);
+      border-radius: 16px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-switch.active { background: var(--green-500); }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-switch.active::after { transform: translateX(20px); }
   </style>
 </head>
 <body>
   <div class="phone-frame">
-    <!-- Screen 1: Splash -->
+    <!-- ============ SCREEN 1: SPLASH ============ -->
     <div class="screen splash-screen active" id="splash">
       <div class="status-bar light">
         <span>9:41</span>
@@ -1094,232 +1596,184 @@
       </div>
     </div>
 
-    <!-- Screen 2: Sign Up -->
+    <!-- ============ SCREEN 2: SIGN UP ============ -->
     <div class="screen signup-screen" id="signup">
-      <div class="status-bar dark">
-        <span>9:41</span>
-        <span></span>
-      </div>
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
       <div class="signup-content">
         <div class="signup-header">
           <h1 class="h1">Welcome to EcoMove</h1>
-          <p class="body">Get rewarded for walking, cycling, and taking the bus</p>
+          <p>Get rewarded for walking, cycling, and taking the bus</p>
         </div>
         <div class="signup-buttons">
-          <button class="btn btn-apple" onclick="navigateTo('profile')">
-            <span></span> Continue with Apple
-          </button>
-          <button class="btn btn-google" onclick="navigateTo('profile')">
-            <span>G</span> Continue with Google
-          </button>
+          <button class="btn btn-apple" onclick="navigateTo('profile-setup')"> Continue with Apple</button>
+          <button class="btn btn-google" onclick="navigateTo('profile-setup')">G Continue with Google</button>
         </div>
-        <div class="divider">
+        <div class="divider signup-divider">
           <div class="divider-line"></div>
           <span>or</span>
           <div class="divider-line"></div>
         </div>
-        <button class="btn btn-secondary" onclick="navigateTo('profile')">
-          ✉️ Sign up with Email
-        </button>
+        <button class="btn btn-secondary" onclick="navigateTo('profile-setup')">Sign up with Email</button>
         <div class="signup-footer">
           <p>Already have an account? <a href="#" onclick="navigateTo('home')">Log in</a></p>
         </div>
-        <p class="legal-text">
-          By continuing, you agree to our<br>
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-        </p>
+        <p class="legal-text">By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
       </div>
-      <div class="home-indicator">
-        <div class="home-indicator-bar"></div>
-      </div>
+      <div class="home-indicator"><div class="home-indicator-bar"></div></div>
     </div>
 
-    <!-- Screen 3: Profile Setup -->
-    <div class="screen profile-screen" id="profile">
-      <div class="status-bar dark">
-        <span>9:41</span>
-        <span></span>
+    <!-- ============ SCREEN 3: PROFILE SETUP ============ -->
+    <div class="screen setup-screen" id="profile-setup">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="setup-header">
+        <span class="skip-btn" onclick="navigateTo('health-setup')">Skip</span>
       </div>
-      <div class="profile-header">
-        <span class="skip-btn" onclick="navigateTo('health')">Skip</span>
-      </div>
-      <div class="profile-content">
-        <h2 class="h2 profile-title">Tell us about you</h2>
-        <p class="body profile-subtitle">This helps us personalize your experience</p>
-
+      <div class="setup-content" style="padding: 0 16px;">
+        <h2 class="h2 setup-title">Tell us about you</h2>
+        <p class="setup-subtitle">This helps us personalize your experience</p>
         <div class="input-group">
           <label class="input-label">First name *</label>
-          <input type="text" class="input" placeholder="Enter your name">
+          <input type="text" class="input" placeholder="Enter your name" value="Fiona">
         </div>
-
         <div class="input-group">
           <label class="input-label">Parish (optional)</label>
           <select class="input">
             <option>Select your parish</option>
-            <option>St Helier</option>
+            <option selected>St Helier</option>
             <option>St Brelade</option>
             <option>St Peter</option>
             <option>Grouville</option>
-            <option>St Saviour</option>
-            <option>St Clement</option>
-            <option>St Lawrence</option>
-            <option>Trinity</option>
-            <option>St John</option>
-            <option>St Mary</option>
-            <option>St Ouen</option>
-            <option>St Martin</option>
           </select>
         </div>
-
         <label class="input-label">What motivates you most?</label>
         <div class="motivation-grid">
-          <div class="motivation-card" onclick="selectMotivation(this)">
-            <span class="icon">❤️</span>
-            <span>Health</span>
-          </div>
-          <div class="motivation-card" onclick="selectMotivation(this)">
-            <span class="icon">💰</span>
-            <span>Savings</span>
-          </div>
-          <div class="motivation-card" onclick="selectMotivation(this)">
-            <span class="icon">🌍</span>
-            <span>Planet</span>
-          </div>
-          <div class="motivation-card" onclick="selectMotivation(this)">
-            <span class="icon">👥</span>
-            <span>Social</span>
-          </div>
+          <div class="motivation-card selected" onclick="selectMotivation(this)"><span class="icon">❤️</span><span>Health</span></div>
+          <div class="motivation-card" onclick="selectMotivation(this)"><span class="icon">💰</span><span>Savings</span></div>
+          <div class="motivation-card" onclick="selectMotivation(this)"><span class="icon">🌍</span><span>Planet</span></div>
+          <div class="motivation-card" onclick="selectMotivation(this)"><span class="icon">👥</span><span>Social</span></div>
         </div>
       </div>
-      <div class="profile-footer">
-        <button class="btn btn-primary" onclick="navigateTo('health')">Continue</button>
+      <div class="setup-footer" style="padding: 16px;">
+        <button class="btn btn-primary" onclick="navigateTo('health-setup')">Continue</button>
         <div class="progress-dots">
           <div class="dot active"></div>
-          <div class="dot active"></div>
           <div class="dot"></div>
           <div class="dot"></div>
           <div class="dot"></div>
         </div>
       </div>
-      <div class="home-indicator">
-        <div class="home-indicator-bar"></div>
-      </div>
+      <div class="home-indicator"><div class="home-indicator-bar"></div></div>
     </div>
 
-    <!-- Screen 4: Health Permission -->
-    <div class="screen health-screen" id="health">
-      <div class="status-bar dark">
-        <span>9:41</span>
-        <span></span>
-      </div>
-      <div class="profile-header">
-        <span class="skip-btn" onclick="navigateTo('home')">Skip</span>
+    <!-- ============ SCREEN 4: HEALTH SETUP ============ -->
+    <div class="screen setup-screen" id="health-setup">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="setup-header" style="padding: 12px 16px;">
+        <span class="skip-btn" onclick="navigateTo('value-preview')">Skip</span>
       </div>
       <div class="health-content">
         <div class="health-icon">❤️</div>
         <h2 class="h2 health-title">Connect your health data</h2>
-        <p class="body health-description">
-          EcoMove automatically tracks your steps so you earn points without thinking about it.
-        </p>
-
+        <p class="health-description">EcoMove automatically tracks your steps so you earn points without thinking about it.</p>
         <div class="health-info">
-          <div class="health-info-item">
-            <span class="health-check">✓</span>
-            <span>We only access step count</span>
-          </div>
-          <div class="health-info-item">
-            <span class="health-check">✓</span>
-            <span>We never see heart rate, weight, or health data</span>
-          </div>
-          <div class="health-info-item">
-            <span class="health-check">✓</span>
-            <span>Your data stays secure under Jersey Data Trust governance</span>
-          </div>
+          <div class="health-info-item"><span class="health-check">✓</span><span>We only access step count</span></div>
+          <div class="health-info-item"><span class="health-check">✓</span><span>We never see heart rate, weight, or health data</span></div>
+          <div class="health-info-item"><span class="health-check">✓</span><span>Your data stays secure under Jersey Data Trust governance</span></div>
         </div>
       </div>
       <div class="health-footer">
-        <button class="btn btn-primary" onclick="navigateTo('home')">Connect Health Data</button>
-        <div class="privacy-link">
-          <a href="#">Learn more about our privacy policy</a>
+        <button class="btn btn-primary" onclick="navigateTo('value-preview')">Connect Health Data</button>
+        <div class="privacy-link"><a href="#">Learn more about our privacy policy</a></div>
+        <div class="progress-dots">
+          <div class="dot active"></div>
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
+      </div>
+      <div class="home-indicator"><div class="home-indicator-bar"></div></div>
+    </div>
+
+    <!-- ============ SCREEN 5: VALUE PREVIEW ============ -->
+    <div class="screen setup-screen" id="value-preview">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="value-content">
+        <h1 class="value-title">You're all set! 🎉</h1>
+        <p class="value-subtitle">Based on your average activity, here's what you could earn:</p>
+        <div class="value-card">
+          <div class="value-card-label">📊 This Week</div>
+          <div class="value-card-number">~500</div>
+          <div class="value-card-sub">points</div>
+        </div>
+        <p style="color: var(--gray-600); margin-bottom: 16px;">Your first reward could be:</p>
+        <div class="first-reward-card">
+          <span class="first-reward-icon">☕</span>
+          <div class="first-reward-info">
+            <div class="first-reward-name">Co-op Coffee</div>
+            <div class="first-reward-sub">Just 1,000 steps away!</div>
+          </div>
+        </div>
+      </div>
+      <div class="setup-footer" style="padding: 24px 16px;">
+        <button class="btn btn-primary" onclick="navigateTo('home')">Get Started</button>
         <div class="progress-dots">
           <div class="dot active"></div>
           <div class="dot active"></div>
           <div class="dot active"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+          <div class="dot active"></div>
         </div>
       </div>
-      <div class="home-indicator">
-        <div class="home-indicator-bar"></div>
-      </div>
+      <div class="home-indicator"><div class="home-indicator-bar"></div></div>
     </div>
 
-    <!-- Screen 5: Home Dashboard -->
+    <!-- ============ SCREEN 6: HOME ============ -->
     <div class="screen home-screen" id="home">
-      <div class="status-bar dark">
-        <span>9:41</span>
-        <span></span>
-      </div>
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
       <div class="header home-header">
         <span class="header-action">☰</span>
         <span class="header-title">EcoMove</span>
-        <span class="header-action notification-badge">
-          🔔
-          <span class="badge">2</span>
-        </span>
+        <span class="header-action notification-badge">🔔<span class="notif-dot">2</span></span>
       </div>
       <div class="home-content">
         <h3 class="h3 greeting">Good morning, Fiona! 👋</h3>
-
         <div class="today-card">
-          <div class="today-label">TODAY'S ACTIVITY</div>
+          <div class="card-label">TODAY'S ACTIVITY</div>
           <div class="step-count">
             <div class="step-number">4,523</div>
             <div class="step-label">steps</div>
           </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 60%;"></div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
           <div class="today-footer">
             <span>Goal: 7,500</span>
             <span class="points-earned">+45 points</span>
           </div>
         </div>
-
         <div class="stat-grid">
           <div class="stat-card" onclick="navigateTo('rewards')">
-            <div class="stat-label">💰 POINTS</div>
+            <div class="card-label"><span class="stat-icon">💰</span>POINTS</div>
             <div class="stat-value">752</div>
             <div class="stat-action">Redeem →</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">🔥 STREAK</div>
+          <div class="stat-card" onclick="navigateTo('activity')">
+            <div class="card-label"><span class="stat-icon">🔥</span>STREAK</div>
             <div class="stat-value">5 days</div>
             <div class="stat-action">Keep going!</div>
           </div>
         </div>
-
-        <div class="almost-card" onclick="navigateTo('rewards')">
-          <div class="almost-header">🎯 ALMOST THERE!</div>
-          <div class="almost-content">
-            <div class="almost-reward">
+        <div class="promo-card" onclick="navigateTo('reward-detail')">
+          <div class="promo-header"><span class="promo-label">🎯 ALMOST THERE!</span></div>
+          <div class="promo-content">
+            <div class="promo-reward">
               <span class="reward-icon">☕</span>
-              <div class="reward-info">
-                <h4>Co-op Coffee</h4>
-                <p>Just 48 more points!</p>
-              </div>
+              <div class="reward-info"><h4>Co-op Coffee</h4><p>Just 48 more points!</p></div>
             </div>
-            <span>→</span>
+            <span style="color: var(--gray-400);">→</span>
           </div>
         </div>
-
-        <div class="challenge-card">
-          <div class="challenge-label">🏆 ACTIVE CHALLENGE</div>
+        <div class="challenge-card" onclick="navigateTo('challenges')">
+          <div class="card-label"><span class="stat-icon">🏆</span>ACTIVE CHALLENGE</div>
           <div class="challenge-title">January Step Challenge</div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 78%;"></div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 78%;"></div></div>
           <div class="challenge-footer">
             <span>3 days left</span>
             <span class="view-link">View →</span>
@@ -1327,40 +1781,88 @@
         </div>
       </div>
       <div class="tab-bar">
-        <div class="tab-item active">
-          <span class="tab-icon">🏠</span>
-          <span>Home</span>
-        </div>
-        <div class="tab-item">
-          <span class="tab-icon">📊</span>
-          <span>Activity</span>
-        </div>
-        <div class="tab-item" onclick="navigateTo('rewards')">
-          <span class="tab-icon">🎁</span>
-          <span>Rewards</span>
-        </div>
-        <div class="tab-item">
-          <span class="tab-icon">🏆</span>
-          <span>Challenges</span>
-        </div>
-        <div class="tab-item">
-          <span class="tab-icon">👤</span>
-          <span>Profile</span>
-        </div>
+        <div class="tab-item active" onclick="navigateTo('home')"><span class="tab-icon">🏠</span><span>Home</span></div>
+        <div class="tab-item" onclick="navigateTo('activity')"><span class="tab-icon">📊</span><span>Activity</span></div>
+        <div class="tab-item" onclick="navigateTo('rewards')"><span class="tab-icon">🎁</span><span>Rewards</span></div>
+        <div class="tab-item" onclick="navigateTo('challenges')"><span class="tab-icon">🏆</span><span>Challenges</span></div>
+        <div class="tab-item" onclick="navigateTo('profile')"><span class="tab-icon">👤</span><span>Profile</span></div>
       </div>
     </div>
 
-    <!-- Screen 6: Rewards -->
+    <!-- ============ SCREEN 7: ACTIVITY ============ -->
+    <div class="screen activity-screen" id="activity">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span class="header-action" onclick="navigateTo('home')">←</span><span class="header-title">Activity</span><span style="width:40px;"></span></div>
+      <div class="activity-content">
+        <div class="segment-wrapper">
+          <div class="segment-control">
+            <button class="segment-btn active">Daily</button>
+            <button class="segment-btn">Weekly</button>
+            <button class="segment-btn">Monthly</button>
+          </div>
+        </div>
+        <div class="date-nav">
+          <button class="date-nav-btn">◀</button>
+          <span class="date-nav-label">January 30, 2026</span>
+          <button class="date-nav-btn">▶</button>
+        </div>
+        <div class="chart-container">
+          <div class="chart-bars">
+            <div class="chart-bar" style="height: 20%;"></div>
+            <div class="chart-bar" style="height: 45%;"></div>
+            <div class="chart-bar" style="height: 30%;"></div>
+            <div class="chart-bar" style="height: 65%;"></div>
+            <div class="chart-bar" style="height: 80%;"></div>
+            <div class="chart-bar" style="height: 55%;"></div>
+            <div class="chart-bar" style="height: 40%;"></div>
+            <div class="chart-bar highlight" style="height: 90%;"></div>
+            <div class="chart-bar" style="height: 70%;"></div>
+            <div class="chart-bar" style="height: 35%;"></div>
+            <div class="chart-bar" style="height: 25%;"></div>
+            <div class="chart-bar" style="height: 15%;"></div>
+          </div>
+          <div class="chart-labels">
+            <span>6am</span><span>8am</span><span>10am</span><span>12pm</span><span>2pm</span><span>4pm</span><span>6pm</span><span>8pm</span><span>10pm</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="card-label">SUMMARY</div>
+          <div class="summary-grid">
+            <div class="summary-item"><div class="summary-icon">👣</div><div class="summary-value">8,234</div><div class="summary-label">Steps</div></div>
+            <div class="summary-item"><div class="summary-icon">📏</div><div class="summary-value">5.8 km</div><div class="summary-label">Distance</div></div>
+            <div class="summary-item"><div class="summary-icon">⏱</div><div class="summary-value">68 min</div><div class="summary-label">Active</div></div>
+            <div class="summary-item"><div class="summary-icon">💰</div><div class="summary-value">+82</div><div class="summary-label">Points</div></div>
+          </div>
+        </div>
+        <div class="activity-log">
+          <div class="log-title">ACTIVITY LOG</div>
+          <div class="log-item">
+            <div class="log-header"><span>🚶 Morning Walk</span><span class="log-points">+34 pts</span></div>
+            <div class="log-details">07:30 - 08:15 • 3,421 steps • via HealthKit</div>
+          </div>
+          <div class="log-item">
+            <div class="log-header"><span>🚶 Lunch Walk</span><span class="log-points">+21 pts</span></div>
+            <div class="log-details">12:30 - 13:00 • 2,156 steps • via HealthKit</div>
+          </div>
+          <div class="log-item">
+            <div class="log-header"><span>🚶 Evening Walk</span><span class="log-points">+27 pts</span></div>
+            <div class="log-details">18:00 - 18:45 • 2,657 steps • via HealthKit</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item" onclick="navigateTo('home')"><span class="tab-icon">🏠</span><span>Home</span></div>
+        <div class="tab-item active" onclick="navigateTo('activity')"><span class="tab-icon">📊</span><span>Activity</span></div>
+        <div class="tab-item" onclick="navigateTo('rewards')"><span class="tab-icon">🎁</span><span>Rewards</span></div>
+        <div class="tab-item" onclick="navigateTo('challenges')"><span class="tab-icon">🏆</span><span>Challenges</span></div>
+        <div class="tab-item" onclick="navigateTo('profile')"><span class="tab-icon">👤</span><span>Profile</span></div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 8: REWARDS ============ -->
     <div class="screen rewards-screen" id="rewards">
-      <div class="status-bar dark">
-        <span>9:41</span>
-        <span></span>
-      </div>
-      <div class="header">
-        <span class="header-action" onclick="navigateTo('home')">←</span>
-        <span class="header-title">Rewards</span>
-        <span class="header-action" onclick="navigateTo('voucher')">🎫</span>
-      </div>
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span class="header-action" onclick="navigateTo('home')">←</span><span class="header-title">Rewards</span><span class="header-action" onclick="navigateTo('voucher')">🎫</span></div>
       <div class="points-banner">
         <div class="points-banner-label">💰 YOUR POINTS</div>
         <div class="points-banner-value">752</div>
@@ -1368,172 +1870,303 @@
       <div class="rewards-content">
         <div class="section-header">🎯 ALMOST THERE</div>
         <div class="almost-scroll">
-          <div class="almost-item" onclick="navigateTo('voucher')">
-            <div class="almost-item-icon">☕</div>
-            <div class="almost-item-name">Coffee</div>
-            <div class="almost-item-pts">100 pts</div>
-            <div class="almost-item-gap">48 away</div>
-          </div>
-          <div class="almost-item">
-            <div class="almost-item-icon">🥐</div>
-            <div class="almost-item-name">Pastry</div>
-            <div class="almost-item-pts">150 pts</div>
-            <div class="almost-item-gap">98 away</div>
-          </div>
-          <div class="almost-item">
-            <div class="almost-item-icon">🥗</div>
-            <div class="almost-item-name">Salad</div>
-            <div class="almost-item-pts">200 pts</div>
-            <div class="almost-item-gap">148 away</div>
-          </div>
+          <div class="almost-item" onclick="navigateTo('reward-detail')"><div class="almost-item-icon">☕</div><div class="almost-item-name">Coffee</div><div class="almost-item-pts">100 pts</div><div class="almost-item-gap">48 away</div></div>
+          <div class="almost-item"><div class="almost-item-icon">🥐</div><div class="almost-item-name">Pastry</div><div class="almost-item-pts">150 pts</div><div class="almost-item-gap">98 away</div></div>
+          <div class="almost-item"><div class="almost-item-icon">🥗</div><div class="almost-item-name">Salad</div><div class="almost-item-pts">200 pts</div><div class="almost-item-gap">148 away</div></div>
         </div>
-
         <div class="section-header">CATEGORIES</div>
         <div class="category-chips">
-          <div class="chip active">All</div>
-          <div class="chip">☕ Cafes</div>
-          <div class="chip">🍽 Dining</div>
-          <div class="chip">🛍 Shopping</div>
-          <div class="chip">🎬 Entertainment</div>
+          <button class="chip active">All</button>
+          <button class="chip">☕ Cafes</button>
+          <button class="chip">🍽 Dining</button>
+          <button class="chip">🛍 Shopping</button>
+          <button class="chip">🎬 Fun</button>
         </div>
-
         <div class="rewards-grid">
-          <div class="reward-card" onclick="navigateTo('voucher')">
-            <div class="reward-card-image">☕</div>
-            <div class="reward-card-content">
-              <div class="reward-card-name">Co-op Coffee</div>
-              <div class="reward-card-pts">100 pts</div>
-            </div>
-          </div>
-          <div class="reward-card">
-            <div class="reward-card-image">🥐</div>
-            <div class="reward-card-content">
-              <div class="reward-card-name">Bakery Treat</div>
-              <div class="reward-card-pts">150 pts</div>
-            </div>
-          </div>
-          <div class="reward-card">
-            <div class="reward-card-image">🎬</div>
-            <div class="reward-card-content">
-              <div class="reward-card-name">Cinema Ticket</div>
-              <div class="reward-card-pts">500 pts</div>
-            </div>
-          </div>
-          <div class="reward-card">
-            <div class="reward-card-image">🏃</div>
-            <div class="reward-card-content">
-              <div class="reward-card-name">Sports Voucher</div>
-              <div class="reward-card-pts">750 pts</div>
-            </div>
-          </div>
+          <div class="reward-card" onclick="navigateTo('reward-detail')"><div class="reward-card-image">☕</div><div class="reward-card-content"><div class="reward-card-name">Co-op Coffee</div><div class="reward-card-pts">100 pts</div></div></div>
+          <div class="reward-card"><div class="reward-card-image">🥐</div><div class="reward-card-content"><div class="reward-card-name">Bakery Treat</div><div class="reward-card-pts">150 pts</div></div></div>
+          <div class="reward-card"><div class="reward-card-image">🎬</div><div class="reward-card-content"><div class="reward-card-name">Cinema Ticket</div><div class="reward-card-pts">500 pts</div></div></div>
+          <div class="reward-card"><div class="reward-card-image">🛒</div><div class="reward-card-content"><div class="reward-card-name">Co-op £5</div><div class="reward-card-pts">500 pts</div></div></div>
         </div>
       </div>
       <div class="tab-bar">
-        <div class="tab-item" onclick="navigateTo('home')">
-          <span class="tab-icon">🏠</span>
-          <span>Home</span>
+        <div class="tab-item" onclick="navigateTo('home')"><span class="tab-icon">🏠</span><span>Home</span></div>
+        <div class="tab-item" onclick="navigateTo('activity')"><span class="tab-icon">📊</span><span>Activity</span></div>
+        <div class="tab-item active" onclick="navigateTo('rewards')"><span class="tab-icon">🎁</span><span>Rewards</span></div>
+        <div class="tab-item" onclick="navigateTo('challenges')"><span class="tab-icon">🏆</span><span>Challenges</span></div>
+        <div class="tab-item" onclick="navigateTo('profile')"><span class="tab-icon">👤</span><span>Profile</span></div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 9: REWARD DETAIL ============ -->
+    <div class="screen detail-screen" id="reward-detail">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span class="header-action" onclick="navigateTo('rewards')">←</span><span class="header-title">Reward</span><span style="width:40px;"></span></div>
+      <div class="detail-image">☕</div>
+      <div class="detail-content">
+        <h1 class="detail-title">Co-op Coffee</h1>
+        <p class="detail-partner">Co-op Jersey</p>
+        <p class="detail-description">Enjoy any hot drink from the Costa Coffee machine at participating Co-op stores across Jersey.</p>
+        <div class="detail-meta">
+          <div class="meta-item"><span class="meta-icon">📍</span>All Jersey Co-op locations</div>
+          <div class="meta-item"><span class="meta-icon">📅</span>Valid for 30 days after redemption</div>
         </div>
-        <div class="tab-item">
-          <span class="tab-icon">📊</span>
-          <span>Activity</span>
+        <div class="terms-section">
+          <div class="terms-title">Terms & Conditions</div>
+          <ul class="terms-list">
+            <li>One drink per voucher</li>
+            <li>Cannot be combined with other offers</li>
+            <li>Show QR code to cashier</li>
+            <li>Valid at participating locations only</li>
+          </ul>
         </div>
-        <div class="tab-item active">
-          <span class="tab-icon">🎁</span>
-          <span>Rewards</span>
-        </div>
-        <div class="tab-item">
-          <span class="tab-icon">🏆</span>
-          <span>Challenges</span>
-        </div>
-        <div class="tab-item">
-          <span class="tab-icon">👤</span>
-          <span>Profile</span>
+        <div class="redeem-section">
+          <div class="redeem-cost">
+            <div class="redeem-points">100 points</div>
+            <div class="redeem-label">to redeem</div>
+          </div>
+          <div class="balance-preview">
+            <span>Your balance: 752</span>
+            <span>After: 652</span>
+          </div>
+          <button class="btn btn-primary" onclick="showRedeemModal()">Redeem Now</button>
         </div>
       </div>
     </div>
 
-    <!-- Screen 7: Voucher -->
+    <!-- ============ SCREEN 10: VOUCHER ============ -->
     <div class="screen voucher-screen" id="voucher">
-      <div class="status-bar dark">
-        <span>9:41</span>
-        <span></span>
-      </div>
-      <div class="header">
-        <span class="header-action" onclick="navigateTo('rewards')">←</span>
-        <span class="header-title">My Voucher</span>
-        <span class="header-action">Share</span>
-      </div>
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span class="header-action" onclick="navigateTo('rewards')">←</span><span class="header-title">My Voucher</span><span class="header-text-btn">Share</span></div>
       <div class="voucher-content">
         <div class="voucher-card">
           <div class="qr-code">
             <div class="qr-pattern">
-              <!-- Simulated QR pattern -->
-              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
-              <div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
-              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
-              <div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
-              <div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
-              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
-              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
-              <div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div>
+              <div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div><div class="qr-cell dark"></div>
             </div>
           </div>
           <div class="voucher-code">ECO-X7K9</div>
           <div class="voucher-instruction">Show this to the cashier</div>
         </div>
-
-        <div class="voucher-title">☕ Co-op Coffee</div>
-        <p class="voucher-description">Any hot drink from the Costa Coffee machine.</p>
-
-        <div class="voucher-info-card">
-          <div class="voucher-info-label">📅 EXPIRES</div>
-          <div class="voucher-info-value">February 15, 2026</div>
-          <div class="voucher-info-sub">(30 days remaining)</div>
-        </div>
-
-        <div class="voucher-info-card">
-          <div class="voucher-info-label">📍 VALID LOCATIONS</div>
-          <ul class="location-list">
-            <li>Co-op St Helier</li>
-            <li>Co-op St Brelade</li>
-            <li>All Jersey Co-op locations</li>
-          </ul>
-        </div>
-
-        <div class="offline-notice">
-          ℹ️ Saved offline for use without internet connection
+        <div class="voucher-details">
+          <div class="voucher-title">☕ Co-op Coffee</div>
+          <p class="voucher-description">Any hot drink from the Costa Coffee machine.</p>
+          <div class="voucher-info-card">
+            <div class="voucher-info-label">📅 EXPIRES</div>
+            <div class="voucher-info-value">February 28, 2026</div>
+            <div class="voucher-info-sub">(29 days remaining)</div>
+          </div>
+          <div class="voucher-info-card">
+            <div class="voucher-info-label">📍 VALID LOCATIONS</div>
+            <ul class="location-list">
+              <li>Co-op St Helier</li>
+              <li>Co-op St Brelade</li>
+              <li>All Jersey Co-op locations</li>
+            </ul>
+          </div>
+          <div class="offline-notice">ℹ️ Saved offline for use without internet</div>
         </div>
       </div>
     </div>
+
+    <!-- ============ SCREEN 11: CHALLENGES ============ -->
+    <div class="screen challenges-screen" id="challenges">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span class="header-action" onclick="navigateTo('home')">←</span><span class="header-title">Challenges</span><span style="width:40px;"></span></div>
+      <div class="challenges-content">
+        <div class="segment-wrapper" style="padding: 16px; background: var(--white);">
+          <div class="segment-control">
+            <button class="segment-btn active">Active</button>
+            <button class="segment-btn">Available</button>
+            <button class="segment-btn">Done</button>
+          </div>
+        </div>
+        <div style="padding-top: 16px;">
+          <div class="challenge-item">
+            <div class="challenge-item-header"><span class="challenge-item-icon">🎯</span><span class="challenge-item-title">January Step Challenge</span></div>
+            <div class="challenge-item-desc">Walk 100,000 steps this month</div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 78%;"></div></div>
+            <div class="challenge-progress">
+              <span>78,234 / 100,000 steps</span>
+              <span class="challenge-bonus">🏆 500 pts</span>
+            </div>
+            <div class="challenge-rank">📊 Your rank: #12 of 156</div>
+          </div>
+          <div class="challenge-item">
+            <div class="challenge-item-header"><span class="challenge-item-icon">🔥</span><span class="challenge-item-title">5-Day Streak</span></div>
+            <div class="challenge-item-desc">Hit your daily goal 5 days in a row</div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
+            <div class="challenge-progress">
+              <span>4 / 5 days</span>
+              <span class="challenge-bonus">🏆 100 pts</span>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-preview">
+          <div class="leaderboard-title">🏆 WEEKLY LEADERBOARD</div>
+          <div class="leaderboard-item"><div class="leaderboard-rank">🥇</div><div class="leaderboard-user"><div class="leaderboard-avatar">SM</div><div class="leaderboard-name">Sarah M.</div></div><div class="leaderboard-steps">52,341</div></div>
+          <div class="leaderboard-item"><div class="leaderboard-rank">🥈</div><div class="leaderboard-user"><div class="leaderboard-avatar">JT</div><div class="leaderboard-name">James T.</div></div><div class="leaderboard-steps">48,892</div></div>
+          <div class="leaderboard-item"><div class="leaderboard-rank">🥉</div><div class="leaderboard-user"><div class="leaderboard-avatar">EL</div><div class="leaderboard-name">Emma L.</div></div><div class="leaderboard-steps">45,123</div></div>
+          <div class="leaderboard-item leaderboard-you"><div class="leaderboard-rank">12</div><div class="leaderboard-user"><div class="leaderboard-avatar" style="background: var(--green-500); color: white;">F</div><div class="leaderboard-name">You</div></div><div class="leaderboard-steps">38,234</div></div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item" onclick="navigateTo('home')"><span class="tab-icon">🏠</span><span>Home</span></div>
+        <div class="tab-item" onclick="navigateTo('activity')"><span class="tab-icon">📊</span><span>Activity</span></div>
+        <div class="tab-item" onclick="navigateTo('rewards')"><span class="tab-icon">🎁</span><span>Rewards</span></div>
+        <div class="tab-item active" onclick="navigateTo('challenges')"><span class="tab-icon">🏆</span><span>Challenges</span></div>
+        <div class="tab-item" onclick="navigateTo('profile')"><span class="tab-icon">👤</span><span>Profile</span></div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 12: PROFILE ============ -->
+    <div class="screen profile-screen" id="profile">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span style="width:40px;"></span><span class="header-title">Profile</span><span class="header-action" onclick="navigateTo('notifications')">⚙️</span></div>
+      <div class="profile-content">
+        <div class="profile-header-section">
+          <div class="profile-avatar">F</div>
+          <div class="profile-name">Fiona</div>
+          <div class="profile-parish">St Helier Parish</div>
+          <div class="profile-member">Member since Jan 2026</div>
+        </div>
+        <div class="stats-section">
+          <div class="stats-title">YOUR STATS</div>
+          <div class="stats-grid">
+            <div class="stat-item"><div class="stat-item-icon">👣</div><div class="stat-item-value">234,567</div><div class="stat-item-label">Total Steps</div></div>
+            <div class="stat-item"><div class="stat-item-icon">💰</div><div class="stat-item-value">2,345</div><div class="stat-item-label">Points Earned</div></div>
+            <div class="stat-item"><div class="stat-item-icon">🎁</div><div class="stat-item-value">12</div><div class="stat-item-label">Rewards</div></div>
+            <div class="stat-item"><div class="stat-item-icon">🔥</div><div class="stat-item-value">14</div><div class="stat-item-label">Best Streak</div></div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="list-item"><div class="list-icon">👤</div><div class="list-content"><div class="list-title">Edit Profile</div></div><span class="list-chevron">›</span></div>
+          <div class="list-item" onclick="navigateTo('notifications')"><div class="list-icon">🔔</div><div class="list-content"><div class="list-title">Notifications</div></div><span class="list-chevron">›</span></div>
+          <div class="list-item"><div class="list-icon">❤️</div><div class="list-content"><div class="list-title">Health Data</div><div class="list-subtitle">Connected</div></div><span class="list-chevron">›</span></div>
+          <div class="list-item"><div class="list-icon">🔒</div><div class="list-content"><div class="list-title">Privacy</div></div><span class="list-chevron">›</span></div>
+          <div class="list-item"><div class="list-icon">💰</div><div class="list-content"><div class="list-title">Points History</div></div><span class="list-chevron">›</span></div>
+          <div class="list-item"><div class="list-icon">❓</div><div class="list-content"><div class="list-title">Help & Support</div></div><span class="list-chevron">›</span></div>
+        </div>
+        <div class="logout-section">
+          <button class="btn btn-outline" onclick="navigateTo('signup')">Log Out</button>
+        </div>
+        <div class="app-version">v1.0.0 • Made in Jersey 🇯🇪</div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item" onclick="navigateTo('home')"><span class="tab-icon">🏠</span><span>Home</span></div>
+        <div class="tab-item" onclick="navigateTo('activity')"><span class="tab-icon">📊</span><span>Activity</span></div>
+        <div class="tab-item" onclick="navigateTo('rewards')"><span class="tab-icon">🎁</span><span>Rewards</span></div>
+        <div class="tab-item" onclick="navigateTo('challenges')"><span class="tab-icon">🏆</span><span>Challenges</span></div>
+        <div class="tab-item active" onclick="navigateTo('profile')"><span class="tab-icon">👤</span><span>Profile</span></div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 13: NOTIFICATIONS SETTINGS ============ -->
+    <div class="screen" id="notifications" style="background: var(--gray-50);">
+      <div class="status-bar dark"><span>9:41</span><span></span></div>
+      <div class="header"><span class="header-action" onclick="navigateTo('profile')">←</span><span class="header-title">Notifications</span><span style="width:40px;"></span></div>
+      <div class="settings-content">
+        <div class="card" style="margin-bottom: 16px; padding: 0;">
+          <div class="toggle-item">
+            <div><div class="toggle-label">All Notifications</div><div class="toggle-sub">Master toggle</div></div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+          </div>
+        </div>
+        <div class="section-header" style="padding: 8px 0;">ACTIVITY</div>
+        <div class="card" style="padding: 0;">
+          <div class="toggle-item">
+            <div><div class="toggle-label">Morning Reminder</div><div class="toggle-sub">Daily at 8:00 AM</div></div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+          </div>
+          <div class="toggle-item">
+            <div><div class="toggle-label">Goal Progress</div><div class="toggle-sub">When you're close to your goal</div></div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+          </div>
+          <div class="toggle-item">
+            <div><div class="toggle-label">Streak Alerts</div><div class="toggle-sub">Don't lose your streak!</div></div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+          </div>
+        </div>
+        <div class="section-header" style="padding: 16px 0 8px;">REWARDS & CHALLENGES</div>
+        <div class="card" style="padding: 0;">
+          <div class="toggle-item">
+            <div><div class="toggle-label">New Rewards</div><div class="toggle-sub">When new rewards are available</div></div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+          </div>
+          <div class="toggle-item">
+            <div><div class="toggle-label">Challenge Updates</div><div class="toggle-sub">Progress and reminders</div></div>
+            <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+          </div>
+          <div class="toggle-item">
+            <div><div class="toggle-label">Leaderboard Changes</div><div class="toggle-sub">When your rank changes</div></div>
+            <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MODAL: REDEEM CONFIRMATION ============ -->
+    <div class="modal-overlay" id="redeem-modal">
+      <div class="modal-content">
+        <div class="modal-handle"></div>
+        <h3 class="h3" style="text-align: center; margin-bottom: 8px;">Confirm Redemption</h3>
+        <p style="text-align: center; color: var(--gray-600); margin-bottom: 24px;">You're about to redeem:</p>
+        <div style="display: flex; align-items: center; gap: 16px; background: var(--gray-50); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+          <span style="font-size: 48px;">☕</span>
+          <div>
+            <div style="font-weight: 600; font-size: 18px;">Co-op Coffee</div>
+            <div style="color: var(--green-500); font-weight: 600;">100 points</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 24px; font-size: 14px;">
+          <span style="color: var(--gray-600);">Your balance after:</span>
+          <span style="font-weight: 600;">652 points</span>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-outline" style="flex: 1;" onclick="hideRedeemModal()">Cancel</button>
+          <button class="btn btn-primary" style="flex: 1;" onclick="confirmRedeem()">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TOAST ============ -->
+    <div class="toast" id="toast">
+      <span class="toast-icon">✅</span>
+      <span class="toast-message">Voucher redeemed successfully!</span>
+    </div>
   </div>
 
-  <div class="nav-hint">Click buttons to navigate between screens</div>
-
   <script>
-    // Auto-advance from splash screen
-    setTimeout(() => {
-      navigateTo('signup');
-    }, 3000);
+    // Auto-advance from splash
+    setTimeout(() => navigateTo('signup'), 2500);
 
     function navigateTo(screenId) {
-      // Hide all screens
-      document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-      });
-
-      // Show target screen
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(screenId).classList.add('active');
     }
 
     function selectMotivation(card) {
-      // Toggle selection
-      document.querySelectorAll('.motivation-card').forEach(c => {
-        c.classList.remove('selected');
-      });
+      document.querySelectorAll('.motivation-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
     }
 
-    // Chip selection
+    // Segment controls
+    document.querySelectorAll('.segment-control').forEach(control => {
+      control.querySelectorAll('.segment-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          control.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+
+    // Category chips
     document.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', function() {
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
@@ -1541,10 +2174,31 @@
       });
     });
 
-    // Hide nav hint after first interaction
-    document.addEventListener('click', () => {
-      document.querySelector('.nav-hint').style.display = 'none';
-    }, { once: true });
+    // Redeem modal
+    function showRedeemModal() {
+      document.getElementById('redeem-modal').classList.add('active');
+    }
+
+    function hideRedeemModal() {
+      document.getElementById('redeem-modal').classList.remove('active');
+    }
+
+    function confirmRedeem() {
+      hideRedeemModal();
+      navigateTo('voucher');
+      showToast();
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('active');
+      setTimeout(() => toast.classList.remove('active'), 3000);
+    }
+
+    // Close modal on overlay click
+    document.getElementById('redeem-modal').addEventListener('click', function(e) {
+      if (e.target === this) hideRedeemModal();
+    });
   </script>
 </body>
 </html>
