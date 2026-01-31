@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EcoMove Corporate - Employee App Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       DESIGN SYSTEM - CORPORATE VERSION
+       ======================================== */
+    :root {
+      /* Company Branding (Customizable) */
+      --company-primary: #1E3A5F;  /* JTC Blue - changeable per company */
+      --company-primary-light: #E8EEF4;
+      --company-accent: #2D7D46;   /* EcoMove Green */
+
+      /* Fixed EcoMove Colors */
+      --eco-green: #2D7D46;
+      --eco-green-light: #E8F5E9;
+
+      /* Neutral */
+      --gray-900: #1E293B;
+      --gray-700: #334155;
+      --gray-600: #64748B;
+      --gray-400: #94A3B8;
+      --gray-200: #E2E8F0;
+      --gray-100: #F1F5F9;
+      --gray-50: #F8FAFC;
+      --white: #FFFFFF;
+
+      /* Semantic */
+      --success: #22C55E;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --info: #3B82F6;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0F172A;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      gap: 40px;
+    }
+
+    /* Phone Frame */
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: var(--white);
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      flex-shrink: 0;
+    }
+
+    /* Device Label */
+    .device-label {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 12px;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    /* Screen Container */
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--gray-50);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .status-bar.light { color: var(--white); }
+    .status-bar.dark { color: var(--gray-900); }
+
+    /* Home Indicator */
+    .home-indicator {
+      height: 34px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 8px;
+      flex-shrink: 0;
+    }
+
+    .home-indicator-bar {
+      width: 134px;
+      height: 5px;
+      background: var(--gray-900);
+      border-radius: 3px;
+      opacity: 0.2;
+    }
+
+    /* Typography */
+    .h1 { font-size: 28px; line-height: 36px; font-weight: 700; }
+    .h2 { font-size: 24px; line-height: 32px; font-weight: 700; }
+    .h3 { font-size: 20px; line-height: 28px; font-weight: 600; }
+    .h4 { font-size: 18px; line-height: 24px; font-weight: 600; }
+    .body { font-size: 14px; line-height: 20px; }
+    .caption { font-size: 12px; line-height: 16px; }
+    .overline { font-size: 10px; line-height: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      height: 52px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--company-primary); color: var(--white); }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: var(--white); border: 2px solid var(--company-primary); color: var(--company-primary); }
+    .btn-eco { background: var(--eco-green); color: var(--white); }
+
+    /* Cards */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Header */
+    .header {
+      background: var(--white);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: var(--white);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      color: var(--gray-400);
+      font-size: 10px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-item.active {
+      color: var(--company-primary);
+    }
+
+    .nav-icon {
+      font-size: 22px;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+    }
+
+    /* Progress Ring */
+    .progress-ring-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+    }
+
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+      fill: none;
+      stroke: var(--gray-100);
+      stroke-width: 12;
+    }
+
+    .progress-ring-progress {
+      fill: none;
+      stroke: var(--eco-green);
+      stroke-width: 12;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-ring-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .progress-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .progress-label {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-top: 4px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--company-primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 4px;
+    }
+
+    /* Team Card */
+    .team-card {
+      background: linear-gradient(135deg, var(--company-primary) 0%, var(--company-primary) 100%);
+      border-radius: 16px;
+      padding: 20px;
+      color: var(--white);
+      margin-top: 16px;
+    }
+
+    .team-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .team-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .team-rank {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .team-stats {
+      display: flex;
+      gap: 24px;
+    }
+
+    .team-stat {
+      text-align: left;
+    }
+
+    .team-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .team-stat-label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    /* Leaderboard */
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: var(--white);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .leaderboard-item.highlight {
+      background: var(--company-primary-light);
+      border: 2px solid var(--company-primary);
+    }
+
+    .leaderboard-rank {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin-right: 12px;
+    }
+
+    .rank-1 { background: #FEF3C7; color: #D97706; }
+    .rank-2 { background: #F1F5F9; color: #64748B; }
+    .rank-3 { background: #FED7AA; color: #C2410C; }
+    .rank-other { background: var(--gray-100); color: var(--gray-600); }
+
+    .leaderboard-info {
+      flex: 1;
+    }
+
+    .leaderboard-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--gray-900);
+    }
+
+    .leaderboard-team {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    .leaderboard-steps {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    /* Challenge Card */
+    .challenge-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .challenge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .challenge-badge {
+      background: var(--eco-green-light);
+      color: var(--eco-green);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .challenge-progress {
+      height: 8px;
+      background: var(--gray-100);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .challenge-progress-bar {
+      height: 100%;
+      background: var(--eco-green);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    /* ESG Card */
+    .esg-card {
+      background: linear-gradient(135deg, var(--eco-green) 0%, #1B5E30 100%);
+      border-radius: 16px;
+      padding: 20px;
+      color: var(--white);
+      margin-top: 16px;
+    }
+
+    .esg-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .esg-value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .esg-unit {
+      font-size: 16px;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .esg-subtitle {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-600);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: var(--white);
+      color: var(--gray-900);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Company Header */
+    .company-header {
+      background: var(--company-primary);
+      padding: 20px;
+      color: var(--white);
+    }
+
+    .company-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--company-primary);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .company-name {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .user-greeting {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* Rewards */
+    .reward-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .reward-image {
+      height: 100px;
+      background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .reward-content {
+      padding: 12px;
+    }
+
+    .reward-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--gray-900);
+    }
+
+    .reward-points {
+      font-size: 13px;
+      color: var(--eco-green);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Avatar */
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--company-primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--company-primary);
+      font-size: 18px;
+    }
+
+    /* Profile Section */
+    .profile-header {
+      text-align: center;
+      padding: 24px 20px;
+      background: var(--white);
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--company-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 auto 12px;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .profile-meta {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-top: 4px;
+    }
+
+    .profile-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--company-primary-light);
+      color: var(--company-primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 12px;
+    }
+
+    /* Settings List */
+    .settings-list {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer;
+    }
+
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 18px;
+    }
+
+    .settings-label {
+      flex: 1;
+      font-size: 15px;
+      color: var(--gray-900);
+    }
+
+    .settings-arrow {
+      color: var(--gray-400);
+    }
+
+    /* Splash Screen */
+    .splash-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--company-primary);
+      color: var(--white);
+      text-align: center;
+      padding: 40px;
+    }
+
+    .splash-logo {
+      width: 80px;
+      height: 80px;
+      background: var(--white);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 24px;
+    }
+
+    .splash-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .splash-subtitle {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .splash-company {
+      position: absolute;
+      bottom: 60px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    /* Onboarding */
+    .onboarding-content {
+      flex: 1;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .onboarding-icon {
+      width: 120px;
+      height: 120px;
+      background: var(--company-primary-light);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      margin: 40px auto 32px;
+    }
+
+    .onboarding-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gray-900);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .onboarding-text {
+      font-size: 15px;
+      color: var(--gray-600);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .onboarding-footer {
+      margin-top: auto;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-200);
+    }
+
+    .dot.active {
+      background: var(--company-primary);
+      width: 24px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <div class="device-label">Employee App (Mobile PWA)</div>
+    <div class="phone-frame">
+
+      <!-- ========================================
+           SCREEN: SPLASH
+           ======================================== -->
+      <div class="screen active" id="splash">
+        <div class="splash-content">
+          <div class="splash-logo">🌿</div>
+          <div class="splash-title">EcoMove</div>
+          <div class="splash-subtitle">Corporate Wellness</div>
+          <div class="splash-company">Powered by JTC Group</div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: ONBOARDING
+           ======================================== -->
+      <div class="screen" id="onboarding">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+        <div class="onboarding-content">
+          <div class="onboarding-icon">👋</div>
+          <div class="onboarding-title">Welcome to EcoMove</div>
+          <div class="onboarding-text">
+            Join your colleagues in the JTC Group step challenge. Walk more, compete with your team, and help us reach our ESG goals.
+          </div>
+          <div class="onboarding-footer">
+            <div class="dots">
+              <div class="dot active"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+            <button class="btn btn-primary" onclick="navigateTo('health-connect')">Get Started</button>
+          </div>
+        </div>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: HEALTH CONNECT
+           ======================================== -->
+      <div class="screen" id="health-connect">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+        <div class="onboarding-content">
+          <div class="onboarding-icon">❤️</div>
+          <div class="onboarding-title">Connect Health Data</div>
+          <div class="onboarding-text">
+            Allow EcoMove to read your step count from Apple Health or Google Fit. We only access step data - nothing else.
+          </div>
+          <div style="background: var(--gray-50); border-radius: 12px; padding: 16px; margin-top: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 24px;">🔒</span>
+              <div>
+                <div style="font-weight: 600; font-size: 14px; color: var(--gray-900);">Your data stays private</div>
+                <div style="font-size: 12px; color: var(--gray-600);">Only step counts are shared with your company</div>
+              </div>
+            </div>
+          </div>
+          <div class="onboarding-footer">
+            <div class="dots">
+              <div class="dot"></div>
+              <div class="dot active"></div>
+              <div class="dot"></div>
+            </div>
+            <button class="btn btn-primary" onclick="navigateTo('team-select')">Connect Apple Health</button>
+            <button class="btn btn-secondary" style="margin-top: 12px;" onclick="navigateTo('team-select')">Skip for now</button>
+          </div>
+        </div>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: TEAM SELECT
+           ======================================== -->
+      <div class="screen" id="team-select">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+        <div class="onboarding-content">
+          <div class="onboarding-icon">👥</div>
+          <div class="onboarding-title">Join Your Team</div>
+          <div class="onboarding-text">
+            You've been assigned to a team. Compete together in challenges!
+          </div>
+
+          <div style="background: var(--company-primary); border-radius: 16px; padding: 20px; margin-top: 24px; color: white; text-align: center;">
+            <div style="font-size: 13px; opacity: 0.9;">Your Team</div>
+            <div style="font-size: 22px; font-weight: 700; margin-top: 4px;">Fund Services</div>
+            <div style="font-size: 13px; opacity: 0.9; margin-top: 8px;">12 members · 45,230 steps this week</div>
+          </div>
+
+          <div class="onboarding-footer">
+            <div class="dots">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot active"></div>
+            </div>
+            <button class="btn btn-primary" onclick="navigateTo('home')">Let's Go!</button>
+          </div>
+        </div>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: HOME DASHBOARD
+           ======================================== -->
+      <div class="screen" id="home">
+        <div class="company-header">
+          <div class="status-bar light" style="padding: 0; height: auto; margin-bottom: 12px;">
+            <span>9:41</span>
+            <span>●●●●● 100%</span>
+          </div>
+          <div class="company-logo">JTC</div>
+          <div class="company-name">JTC Group</div>
+          <div class="user-greeting">Good morning, Sarah! 👋</div>
+        </div>
+
+        <div class="content">
+          <!-- Today's Progress -->
+          <div class="card" style="margin-top: -30px; position: relative; z-index: 1;">
+            <div style="text-align: center;">
+              <div class="progress-ring-container">
+                <svg class="progress-ring" width="180" height="180">
+                  <circle class="progress-ring-bg" cx="90" cy="90" r="78"/>
+                  <circle class="progress-ring-progress" cx="90" cy="90" r="78"
+                    stroke-dasharray="490" stroke-dashoffset="147"/>
+                </svg>
+                <div class="progress-ring-text">
+                  <div class="progress-value">7,234</div>
+                  <div class="progress-label">of 10,000 steps</div>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: center; gap: 24px; margin-top: 16px;">
+                <div>
+                  <div style="font-size: 18px; font-weight: 700; color: var(--eco-green);">72</div>
+                  <div style="font-size: 11px; color: var(--gray-600);">Points Today</div>
+                </div>
+                <div>
+                  <div style="font-size: 18px; font-weight: 700; color: var(--company-primary);">5.4 km</div>
+                  <div style="font-size: 11px; color: var(--gray-600);">Distance</div>
+                </div>
+                <div>
+                  <div style="font-size: 18px; font-weight: 700; color: var(--warning);">🔥 7</div>
+                  <div style="font-size: 11px; color: var(--gray-600);">Day Streak</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Card -->
+          <div class="team-card">
+            <div class="team-header">
+              <div class="team-name">👥 Fund Services Team</div>
+              <div class="team-rank">#2 in company</div>
+            </div>
+            <div class="team-stats">
+              <div class="team-stat">
+                <div class="team-stat-value">89,450</div>
+                <div class="team-stat-label">Team steps today</div>
+              </div>
+              <div class="team-stat">
+                <div class="team-stat-value">12</div>
+                <div class="team-stat-label">Active members</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Challenge -->
+          <div style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 600; color: var(--gray-900);">Active Challenge</span>
+              <span style="font-size: 13px; color: var(--company-primary); cursor: pointer;" onclick="navigateTo('challenges')">See all →</span>
+            </div>
+            <div class="challenge-card" onclick="navigateTo('challenges')">
+              <div class="challenge-header">
+                <div>
+                  <div style="font-weight: 600; color: var(--gray-900);">February Step Challenge</div>
+                  <div style="font-size: 12px; color: var(--gray-600); margin-top: 2px;">Team vs Team · 5 days left</div>
+                </div>
+                <div class="challenge-badge">+500 pts</div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 8px;">
+                <span style="color: var(--gray-600);">Team progress</span>
+                <span style="font-weight: 600; color: var(--eco-green);">234,500 / 500,000</span>
+              </div>
+              <div class="challenge-progress">
+                <div class="challenge-progress-bar" style="width: 47%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ESG Impact -->
+          <div class="esg-card">
+            <div class="esg-title">🌍 Your ESG Impact</div>
+            <div class="esg-value">12.4 <span class="esg-unit">kg CO₂</span></div>
+            <div class="esg-subtitle">saved vs. driving this month</div>
+          </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+          <div class="nav-item active" onclick="navigateTo('home')">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span>Leaderboard</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('challenges')">
+            <span class="nav-icon">🎯</span>
+            <span>Challenges</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('rewards')">
+            <span class="nav-icon">🎁</span>
+            <span>Rewards</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('profile')">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+          </div>
+        </nav>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: LEADERBOARD
+           ======================================== -->
+      <div class="screen" id="leaderboard">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+        <div class="header">
+          <div class="header-icon"></div>
+          <div class="header-title">Leaderboard</div>
+          <div class="header-icon">📊</div>
+        </div>
+
+        <div class="content">
+          <div class="tabs">
+            <div class="tab active">My Team</div>
+            <div class="tab">Company</div>
+            <div class="tab">Jersey</div>
+          </div>
+
+          <div style="font-size: 12px; color: var(--gray-600); margin-bottom: 12px;">This week · Fund Services Team</div>
+
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank rank-1">1</div>
+            <div class="avatar" style="margin-right: 12px;">JM</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">James Mitchell</div>
+              <div class="leaderboard-team">Fund Admin</div>
+            </div>
+            <div class="leaderboard-steps">52,340</div>
+          </div>
+
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank rank-2">2</div>
+            <div class="avatar" style="margin-right: 12px;">EW</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Emma Wilson</div>
+              <div class="leaderboard-team">Operations</div>
+            </div>
+            <div class="leaderboard-steps">48,120</div>
+          </div>
+
+          <div class="leaderboard-item highlight">
+            <div class="leaderboard-rank rank-3">3</div>
+            <div class="avatar" style="margin-right: 12px; background: var(--company-primary); color: white;">SJ</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Sarah Jones (You)</div>
+              <div class="leaderboard-team">Fund Admin</div>
+            </div>
+            <div class="leaderboard-steps">45,890</div>
+          </div>
+
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank rank-other">4</div>
+            <div class="avatar" style="margin-right: 12px;">MR</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Michael Roberts</div>
+              <div class="leaderboard-team">Compliance</div>
+            </div>
+            <div class="leaderboard-steps">41,230</div>
+          </div>
+
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank rank-other">5</div>
+            <div class="avatar" style="margin-right: 12px;">LC</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Lisa Chen</div>
+              <div class="leaderboard-team">Fund Admin</div>
+            </div>
+            <div class="leaderboard-steps">38,450</div>
+          </div>
+
+          <div style="text-align: center; margin-top: 16px;">
+            <span style="font-size: 13px; color: var(--company-primary); cursor: pointer;">View all 12 team members →</span>
+          </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+          <div class="nav-item" onclick="navigateTo('home')">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-item active" onclick="navigateTo('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span>Leaderboard</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('challenges')">
+            <span class="nav-icon">🎯</span>
+            <span>Challenges</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('rewards')">
+            <span class="nav-icon">🎁</span>
+            <span>Rewards</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('profile')">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+          </div>
+        </nav>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: CHALLENGES
+           ======================================== -->
+      <div class="screen" id="challenges">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+        <div class="header">
+          <div class="header-icon"></div>
+          <div class="header-title">Challenges</div>
+          <div class="header-icon">🔔</div>
+        </div>
+
+        <div class="content">
+          <div class="tabs">
+            <div class="tab active">Active</div>
+            <div class="tab">Available</div>
+            <div class="tab">Completed</div>
+          </div>
+
+          <!-- Team Challenge -->
+          <div class="challenge-card">
+            <div class="challenge-header">
+              <div>
+                <div style="font-weight: 600; color: var(--gray-900);">February Step Challenge</div>
+                <div style="font-size: 12px; color: var(--gray-600); margin-top: 2px;">Team vs Team</div>
+              </div>
+              <div class="challenge-badge">+500 pts</div>
+            </div>
+            <div style="font-size: 13px; color: var(--gray-600); margin: 12px 0;">
+              Which team can reach 500,000 steps first?
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+              <span style="color: var(--gray-600);">Your team progress</span>
+              <span style="font-weight: 600; color: var(--eco-green);">47%</span>
+            </div>
+            <div class="challenge-progress">
+              <div class="challenge-progress-bar" style="width: 47%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-100);">
+              <div style="font-size: 12px; color: var(--gray-600);">
+                <span style="font-weight: 600; color: var(--gray-900);">5 days</span> remaining
+              </div>
+              <div style="font-size: 12px; color: var(--gray-600);">
+                <span style="font-weight: 600; color: var(--company-primary);">4 teams</span> competing
+              </div>
+            </div>
+          </div>
+
+          <!-- Individual Challenge -->
+          <div class="challenge-card">
+            <div class="challenge-header">
+              <div>
+                <div style="font-weight: 600; color: var(--gray-900);">7-Day Streak</div>
+                <div style="font-size: 12px; color: var(--gray-600); margin-top: 2px;">Individual</div>
+              </div>
+              <div class="challenge-badge">+100 pts</div>
+            </div>
+            <div style="font-size: 13px; color: var(--gray-600); margin: 12px 0;">
+              Hit your daily goal 7 days in a row
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+              <span style="color: var(--gray-600);">Your progress</span>
+              <span style="font-weight: 600; color: var(--eco-green);">5 / 7 days</span>
+            </div>
+            <div class="challenge-progress">
+              <div class="challenge-progress-bar" style="width: 71%;"></div>
+            </div>
+          </div>
+
+          <!-- Company Challenge -->
+          <div class="challenge-card" style="border: 2px solid var(--warning); background: #FFFBEB;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 16px;">🏆</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--warning); text-transform: uppercase;">Jersey Corporate League</span>
+            </div>
+            <div class="challenge-header" style="margin-bottom: 0;">
+              <div>
+                <div style="font-weight: 600; color: var(--gray-900);">JTC vs RBC Challenge</div>
+                <div style="font-size: 12px; color: var(--gray-600); margin-top: 2px;">Company vs Company</div>
+              </div>
+              <div class="challenge-badge" style="background: #FEF3C7; color: #D97706;">+1000 pts</div>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 16px;">
+              <div style="flex: 1; text-align: center; padding: 12px; background: white; border-radius: 8px;">
+                <div style="font-size: 12px; color: var(--gray-600);">JTC Group</div>
+                <div style="font-size: 20px; font-weight: 700; color: var(--company-primary);">1.2M</div>
+              </div>
+              <div style="flex: 1; text-align: center; padding: 12px; background: white; border-radius: 8px;">
+                <div style="font-size: 12px; color: var(--gray-600);">RBC</div>
+                <div style="font-size: 20px; font-weight: 700; color: var(--gray-400);">980K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+          <div class="nav-item" onclick="navigateTo('home')">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span>Leaderboard</span>
+          </div>
+          <div class="nav-item active" onclick="navigateTo('challenges')">
+            <span class="nav-icon">🎯</span>
+            <span>Challenges</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('rewards')">
+            <span class="nav-icon">🎁</span>
+            <span>Rewards</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('profile')">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+          </div>
+        </nav>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: REWARDS
+           ======================================== -->
+      <div class="screen" id="rewards">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+        <div class="header">
+          <div class="header-icon"></div>
+          <div class="header-title">Rewards</div>
+          <div class="header-icon">📜</div>
+        </div>
+
+        <div class="content">
+          <!-- Points Balance -->
+          <div style="background: linear-gradient(135deg, var(--company-primary), #0F2A47); border-radius: 16px; padding: 20px; color: white; text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 12px; opacity: 0.9;">Your Points Balance</div>
+            <div style="font-size: 36px; font-weight: 700; margin: 4px 0;">2,340</div>
+            <div style="font-size: 12px; opacity: 0.8;">Lifetime earned: 5,670 pts</div>
+          </div>
+
+          <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 12px;">Company Rewards</div>
+
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="reward-card">
+              <div class="reward-image">☕</div>
+              <div class="reward-content">
+                <div class="reward-name">Coffee Voucher</div>
+                <div style="font-size: 11px; color: var(--gray-600);">JTC Canteen</div>
+                <div class="reward-points">500 pts</div>
+              </div>
+            </div>
+
+            <div class="reward-card">
+              <div class="reward-image">🌳</div>
+              <div class="reward-content">
+                <div class="reward-name">Plant a Tree</div>
+                <div style="font-size: 11px; color: var(--gray-600);">Charity Donation</div>
+                <div class="reward-points">1,000 pts</div>
+              </div>
+            </div>
+
+            <div class="reward-card">
+              <div class="reward-image">🎟️</div>
+              <div class="reward-content">
+                <div class="reward-name">Extra Leave</div>
+                <div style="font-size: 11px; color: var(--gray-600);">Half day raffle</div>
+                <div class="reward-points">2,500 pts</div>
+              </div>
+            </div>
+
+            <div class="reward-card">
+              <div class="reward-image">💆</div>
+              <div class="reward-content">
+                <div class="reward-name">Spa Voucher</div>
+                <div style="font-size: 11px; color: var(--gray-600);">Ayush Wellness</div>
+                <div class="reward-points">5,000 pts</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-weight: 600; color: var(--gray-900); margin: 20px 0 12px;">My Vouchers</div>
+
+          <div style="background: var(--white); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 48px; height: 48px; background: var(--eco-green-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">☕</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; font-size: 14px; color: var(--gray-900);">Coffee Voucher</div>
+              <div style="font-size: 12px; color: var(--gray-600);">Expires in 14 days</div>
+            </div>
+            <span style="color: var(--company-primary); font-size: 13px; font-weight: 500;">View →</span>
+          </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+          <div class="nav-item" onclick="navigateTo('home')">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span>Leaderboard</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('challenges')">
+            <span class="nav-icon">🎯</span>
+            <span>Challenges</span>
+          </div>
+          <div class="nav-item active" onclick="navigateTo('rewards')">
+            <span class="nav-icon">🎁</span>
+            <span>Rewards</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('profile')">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+          </div>
+        </nav>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           SCREEN: PROFILE
+           ======================================== -->
+      <div class="screen" id="profile">
+        <div class="status-bar dark">
+          <span>9:41</span>
+          <span>●●●●● 100%</span>
+        </div>
+
+        <div class="profile-header">
+          <div class="profile-avatar">SJ</div>
+          <div class="profile-name">Sarah Jones</div>
+          <div class="profile-meta">Fund Services · JTC Group</div>
+          <div class="profile-badge">
+            <span>🏃</span> Active Walker
+          </div>
+        </div>
+
+        <div class="content" style="padding-top: 0;">
+          <!-- Stats -->
+          <div class="stats-grid" style="margin-top: 0;">
+            <div class="stat-card">
+              <div class="stat-value">156K</div>
+              <div class="stat-label">Total Steps</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">5,670</div>
+              <div class="stat-label">Points Earned</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">12</div>
+              <div class="stat-label">Challenges Won</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">23.4kg</div>
+              <div class="stat-label">CO₂ Saved</div>
+            </div>
+          </div>
+
+          <!-- Settings -->
+          <div class="settings-list">
+            <div class="settings-item">
+              <div class="settings-icon">👤</div>
+              <div class="settings-label">Edit Profile</div>
+              <div class="settings-arrow">→</div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-icon">❤️</div>
+              <div class="settings-label">Health Data</div>
+              <div class="settings-arrow">→</div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-icon">🔔</div>
+              <div class="settings-label">Notifications</div>
+              <div class="settings-arrow">→</div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-icon">👁️</div>
+              <div class="settings-label">Privacy Settings</div>
+              <div class="settings-arrow">→</div>
+            </div>
+            <div class="settings-item">
+              <div class="settings-icon">❓</div>
+              <div class="settings-label">Help & Support</div>
+              <div class="settings-arrow">→</div>
+            </div>
+          </div>
+
+          <div class="settings-list" style="margin-top: 12px;">
+            <div class="settings-item" style="color: var(--error);" onclick="navigateTo('splash')">
+              <div class="settings-icon" style="background: #FEE2E2;">🚪</div>
+              <div class="settings-label" style="color: var(--error);">Sign Out</div>
+              <div class="settings-arrow">→</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 20px; font-size: 12px; color: var(--gray-400);">
+            EcoMove v2.0.0 · Corporate Edition
+          </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+          <div class="nav-item" onclick="navigateTo('home')">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span>Leaderboard</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('challenges')">
+            <span class="nav-icon">🎯</span>
+            <span>Challenges</span>
+          </div>
+          <div class="nav-item" onclick="navigateTo('rewards')">
+            <span class="nav-icon">🎁</span>
+            <span>Rewards</span>
+          </div>
+          <div class="nav-item active" onclick="navigateTo('profile')">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+          </div>
+        </nav>
+        <div class="home-indicator">
+          <div class="home-indicator-bar"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    // Auto-advance from splash after 2 seconds
+    setTimeout(() => {
+      if (document.getElementById('splash').classList.contains('active')) {
+        navigateTo('onboarding');
+      }
+    }, 2000);
+
+    // Tab switching
+    document.querySelectorAll('.tabs').forEach(tabContainer => {
+      tabContainer.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
